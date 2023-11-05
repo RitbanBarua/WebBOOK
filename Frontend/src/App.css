@@ -1,0 +1,294 @@
+/* source: https://www.behance.net/gallery/109167661/Notebook-Web-Application-Redesign */
+/* quotes: https://blog.hubspot.com/sales/famous-quotes */
+
+/* Global CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-bg-col: #fff;
+    --secondary-bg-col: #F2F3F7;
+    --grey-border-col: #ced4da;
+}
+
+body {
+    min-height: 100vh;
+}
+
+/* Navbar CSS */
+nav {
+    width: 100%;
+    height: 70px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 10px 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 10px;
+    background-color: var(--primary-bg-col);
+    border-bottom: 1px dotted gray;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+    width: 165px;
+    height: auto;
+}
+
+.search-container{
+    width: 50%;
+}
+
+.search-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.search-form input{
+    width: 100%;
+    height: 36px;
+    padding: 0px 10px;
+    background-color: rgb(239, 239, 239);
+    border: none;
+    outline: none;
+}
+
+.search-form button{
+    padding: 10px;
+    border: none;
+    outline: none;
+}
+
+#nav-right-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-width: 100px;
+    margin-right: 50px;
+}
+
+.dropdown-enabled-container {
+    position: relative;
+    cursor: pointer;
+}
+
+#nav-right-container .dropdown-enabled-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 3.5px;
+}
+
+.user-container .img-container {
+    border: 2px solid black;
+    border-radius: 50%;
+    display: inline-block;
+    overflow: hidden;
+    padding: 2px 2px 0px 2px;
+    margin: 0px 7px 0px 10px;
+}
+
+nav ul li {
+    list-style: none;
+    padding: 5px 0px;
+    /*border-bottom: 1px dotted gray;*/
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #4a4a4a;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 5px 3px;
+    transition: all 0.3s ease-in-out;
+}
+
+.dropdown-container {
+    display: none;
+    background-color: white;
+    box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    min-width: 100px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.3s ease-in;
+}
+
+.dropdown-container li {
+    padding: 5px 3px;
+}
+
+.dropdown-container li:hover {
+    background-color: lightgray;
+}
+
+.dropdown-container li a {
+    display: inline-block;
+    width: 100%;
+    margin: 0px;
+}
+
+.dropdown-container .nav-list-item {
+    margin: 5px;
+}
+
+/* Main Content CSS */
+.header-container {
+    height: 150px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 15px 5px 10px 5px;
+    background-color: var(--secondary-bg-col);
+    margin-top: 70px;
+}
+
+.header-container>div {
+    background-color: var(--primary-bg-col);
+    padding: 15px 10px;
+    border-radius: 10px;
+    margin: 0px 5px;
+    height: 100%;
+}
+
+#header-mid {
+    min-width: 55%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#header-mid .left-container {
+    border: 0.1px dotted gray;
+    border-radius: 7px;
+    overflow: hidden;
+    min-width: 60px;
+}
+
+#header-mid .right-container {
+    padding-left: 10px;
+}
+
+#header-mid .right-container q {
+    display: inline-block;
+    text-align: justify;
+    width: 100%;
+    font-weight: 500;
+}
+
+#header-mid .right-container p {
+    text-align: end;
+    font-style: oblique;
+}
+
+.add-note-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+}
+
+.add-note-container button{
+    border: none;
+    outline: none;
+    padding: 15px 13px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* Note CSS */
+#notes-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    /* height: calc(100vh - 267px); */
+    /* ToDo */
+    overflow-x: hidden;
+    /* height: 100%; */
+    /*padding: 5px;*/
+    background-color: var(--secondary-bg-col);
+}
+
+.note-container {
+    margin: 5px;
+    padding: 10px;
+    border: 1px solid var(--grey-border-col);
+    border-radius: 10px;
+    width: 285px;
+    height: 285px;
+    background-color: var(--primary-bg-col);
+}
+
+.note-container .img-wrapper {
+    width: 100%;
+    height: 37px;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+.note-container .container{
+    display: grid;
+    grid-template-columns: 9fr 1fr;
+    margin-top: 10px;
+    height: calc(100% - 10px - 20px - 5px);
+    overflow: hidden;
+}
+
+.note-container .container .left{
+    padding: 0px 10px 10px 0px;
+    overflow: hidden;
+}
+
+.note-container .container .left h2{
+    margin-bottom: 5px;
+}
+
+.note-container .container .right{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.note-container .container .right button{
+    /* background-color: transparent;
+    color: black;
+    font-size: 14px; */
+    cursor: pointer;
+    outline: none;
+    border: none;
+    width: unset;
+    height: unset;
+    padding: 10px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+#star-btn{
+    cursor: not-allowed;
+    /* pointer-events: none; */
+}
+
+/* MISC */
+.default-disabled {
+    display: none;
+}
+
+.show-dropdown {
+    display: block !important;
+    opacity: 1 !important;
+}
