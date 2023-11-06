@@ -6,7 +6,11 @@ const userSchema = new mongoose.Schema({
     lastName: { type: String },
     email: { type: String, required: true, unique: true, trim: true },
     password: { type: String, required: true, trim: true },
-    dob: Date,
+    countryCode: {
+        type: Number,
+        required: true,
+    },
+    mobile: { type: Number },
     role: String,
     profilePicture: { type: String },
     staredNotes: [{ type: mongoose.Types.ObjectId, ref: 'Note' }]

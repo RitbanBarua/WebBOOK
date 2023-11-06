@@ -42,6 +42,7 @@ app.post("/register", [
     body('lastName', 'Last name must be atleast 2 characters').optional().isLength({ min: 2 }).trim().escape(),
     body('email', 'Please enter a valid email address').normalizeEmail().isEmail(),
     body('password', 'Password must be at least 8 characters long').isLength({ min: 8 }).trim().escape(),
+    body('mobile', 'Please enter a valid mobile no').isMobilePhone(),
     body('profilePicture').optional().isBase64()
 ], async (req, res) => {
     // Check for validation errors
@@ -54,7 +55,7 @@ app.post("/register", [
 
     // If validation passed, continue with your route logic
     try {
-        const { username, firstName, lastName, email, password, dob, profilePicture = "" } = req.body;
+        const { username, firstName, lastName, email, password, countryCode, mobile = "", profilePicture = "" } = req.body;
 
         // Check whether the user with this email exists already
         let user = await User.findOne({ email: req.body.email });
@@ -68,7 +69,8 @@ app.post("/register", [
             lastName: lastName,
             email: email,
             password: hashedPassword,
-            dob: dob,
+            countryCode: countryCode,
+            mobile: mobile,
             role: "User",
             profilePicture: profilePicture
         })
@@ -179,8 +181,8 @@ app.post("/notes/new", authUser, [
 // Update Existing Note Route - PATCH
 app.patch("/notes/:noteId", authUser, [
     param('noteId', 'Invalid noteId').isMongoId(),
-    body('title', 'Enter a valid title ( min: 3, max: 255 )').trim().isLength({ min: 3, max: 255 }).escape(),
-    body('content', 'Description must be atleast 5 characters').trim().isLength({ min: 5 }).escape()
+    body('title', 'Enter a valid title ( min: 3, max: 255 )').optional().trim().isLength({ min: 3, max: 255 }).escape(),
+    body('content', 'Description must be atleast 5 characters').optional().trim().isLength({ min: 5 }).escape()
 ], async (req, res) => {
     // Check for validation errors
     const errors = validationResult(req);
