@@ -63,6 +63,8 @@ app.post("/register", [
             return res.status(400).json({ success: false, message: "Sorry a user with this email already exists" })
         }
         const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        // Create new user object and save it in database
         user = await User.create({
             username: username,
             firstName: firstName,
@@ -233,6 +235,20 @@ app.delete('/notes/:noteId', authUser, [
             return res.status(404).json({ success: false, message: "Note not found." });
         }
         res.status(200).json({ success: true, message: "Note Deletion successful.", deletedNote: deletedNote });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Internal Server Error!", error: error });
+    }
+})
+
+
+// Logout Route
+app.post("/logout", authUser, async (req, res) => {
+    try {
+        // Clear the JWT token cookie
+        res.clearCookie('jwt');
+
+        // Return a success response
+        res.status(200).json({ success: true, message: "Logged out successfully" });
     } catch (error) {
         res.status(500).json({ success: false, message: "Internal Server Error!", error: error });
     }
