@@ -6,12 +6,19 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 
 :root {
     --primary-bg-col: #fff;
     --secondary-bg-col: #F2F3F7;
     --grey-border-col: #ced4da;
+    --input-bg-col: #f9faf8;
+    --input-border-col: rgb(209 213 219);
+    --input-focus-col: rgb(59 130 246);
+    --primary-btn-col: rgb(78, 55, 255);
+    --primary-btn-col-2: #4D47C3;
+    --disabled-input-bg-col: rgba(220, 220, 220, 1);
 }
 
 body {
@@ -41,18 +48,18 @@ nav {
     height: auto;
 }
 
-.search-container{
+.search-container {
     width: 50%;
 }
 
-.search-form{
+.search-form {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: nowrap;
 }
 
-.search-form input{
+.search-form input {
     width: 100%;
     height: 36px;
     padding: 0px 10px;
@@ -61,7 +68,7 @@ nav {
     outline: none;
 }
 
-.search-form button{
+.search-form button {
     padding: 10px;
     border: none;
     outline: none;
@@ -193,7 +200,7 @@ nav ul li a {
     font-style: oblique;
 }
 
-.add-note-container{
+.add-note-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -201,7 +208,7 @@ nav ul li a {
     background-color: transparent;
 }
 
-.add-note-container button{
+.add-note-container button {
     border: none;
     outline: none;
     padding: 15px 13px;
@@ -240,7 +247,7 @@ nav ul li a {
     border-radius: 5px;
 }
 
-.note-container .container{
+.note-container .container {
     display: grid;
     grid-template-columns: 9fr 1fr;
     margin-top: 10px;
@@ -248,23 +255,23 @@ nav ul li a {
     overflow: hidden;
 }
 
-.note-container .container .left{
+.note-container .container .left {
     padding: 0px 10px 10px 0px;
     overflow: hidden;
 }
 
-.note-container .container .left h2{
+.note-container .container .left h2 {
     margin-bottom: 5px;
 }
 
-.note-container .container .right{
+.note-container .container .right {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
 }
 
-.note-container .container .right button{
+.note-container .container .right button {
     /* background-color: transparent;
     color: black;
     font-size: 14px; */
@@ -278,14 +285,342 @@ nav ul li a {
     transition: all 0.3s ease;
 }
 
-#star-btn{
+#star-btn {
     cursor: not-allowed;
     /* pointer-events: none; */
 }
 
+/* New Note CSS */
+.modal-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent black overlay */
+    backdrop-filter: blur(5px);
+    /* Apply a blur effect */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    /* Ensure the modal is on top */
+}
+
+.modal-container {
+    background: var(--primary-bg-col);
+    border-radius: 7px;
+    overflow: hidden;
+    padding: 15px 0px;
+    width: 500px;
+    /* Unset - in media query */
+}
+
+.modal-container header {
+    padding: 0px 10px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.pen-img-wrapper img {
+    max-width: 100px;
+    width: auto;
+    height: auto;
+}
+
+.note-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+label {
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: rgb(55 65 81);
+}
+
+.note-form label {
+    width: 100%;
+    max-width: 400px;
+}
+
+.note-form input {
+    /* margin-bottom: 20px; */
+    background-color: var(--input-bg-col);
+    border: 0.1px solid var(--input-border-col);
+    border-radius: 8px;
+    padding: 10px;
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #000000;
+    appearance: none;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    outline: none;
+    resize: none;
+    width: 100%;
+    max-width: 400px;
+    /* min-width: 300px; */
+    transition: all .2s ease-out;
+}
+
+.error-text {
+    margin-bottom: 20px;
+}
+
+/* .note-form input:focus{
+    outline-color: var(--input-focus-col);
+} */
+
+.note-form textarea {
+    height: auto;
+    min-height: 100px;
+    max-height: 200px;
+    width: 100%;
+    /* min-width: 250px; */
+    max-width: 400px;
+    overflow: auto;
+    background: var(--input-bg-col);
+    border: 0.1px solid var(--input-border-col);
+    border-radius: 8px;
+    /* margin-bottom: 20px; */
+    padding: 5px 6px;
+}
+
+.priority-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.priority-buttons button {
+    padding: 10px 15px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+/* .selected {
+    background-color: #007BFF;
+    color: white;
+    border-color: #007BFF;
+  } */
+
+.high-priority .selected {
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}
+
+.medium-priority .selected {
+    color: #fff;
+    background-color: #f0ad4e;
+    border-color: #eea236;
+}
+
+.low-priority .selected {
+    color: #fff;
+    background-color: #31b0d5;
+    border-color: #269abc;
+    margin: 0px !important;
+}
+
+.note-form .btn-container {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 30px;
+    gap: 5px;
+}
+
+.note-form button[type="submit"] {
+    /* background: #ff7f7f; */
+    background: var(--primary-btn-col);
+    color: white;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.9);
+    transition: all 0.3s ease-in-out;
+    font-weight: bold;
+    letter-spacing: 1px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Register CSS */
+#register-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+#register-container .left {
+    padding: 4% 8% 8% 8%;
+}
+
+.signup-login-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    text-align: left;
+    margin: 5px 0px 30px 0px;
+}
+
+/* .signup-login-header h1{
+    min-width: 124px;
+} */
+
+.signup-login-header span {
+    display: inline-block;
+}
+
+#register-form {
+    display: flex;
+    flex-direction: column;
+    /* padding: 50px 80px;
+    height: auto;
+    min-height: calc(100vh - 100px);
+    position: relative; */
+    overflow: hidden;
+    z-index: 1;
+}
+
+#register-form input {
+    /* margin-bottom: 20px; */
+    background-color: var(--input-bg-col);
+    border: 0.1px solid var(--input-border-col);
+    border-radius: 8px;
+    padding: 10px;
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #000000;
+    appearance: none;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    outline: none;
+    resize: none;
+    width: 100%;
+    /* max-width: 400px; */
+    /* min-width: 300px; */
+    transition: all .2s ease-out;
+}
+
+#signup-name {
+    display: flex;
+    gap: 7px;
+    margin-bottom: 20px;
+}
+
+#register-container .right {
+    background: url('./assests/register.png') no-repeat center center;
+    object-fit: cover;
+    background-size: cover;
+    width: 100%;
+    height: 100vh;
+}
+
+@media only screen and (max-width: 750px) {
+    #register-container {
+        display: block;
+    }
+
+    #register-container .right {
+        display: none;
+    }
+}
+
+/* Dotted Loader CSS */
+/* HTML: <div class="loader"></div> */
+.dotted-loader {
+    width: 53px;
+    aspect-ratio: 4;
+    --_g: no-repeat radial-gradient(circle closest-side, #fff 90%, #0000);
+    background:
+        var(--_g) 0% 50%,
+        var(--_g) 50% 50%,
+        var(--_g) 100% 50%;
+    background-size: calc(100%/3) 100%;
+    animation: l7 1s infinite linear;
+}
+
+@keyframes l7 {
+    33% {
+        background-size: calc(100%/3) 0%, calc(100%/3) 100%, calc(100%/3) 100%
+    }
+
+    50% {
+        background-size: calc(100%/3) 100%, calc(100%/3) 0%, calc(100%/3) 100%
+    }
+
+    66% {
+        background-size: calc(100%/3) 100%, calc(100%/3) 100%, calc(100%/3) 0%
+    }
+}
+
+/* 3rd Party CSS */
+/* .iti__flag {background-image: url("path/to/flags.png");}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .iti__flag {background-image: url("path/to/flags@2x.png");}
+} */
+
 /* MISC */
+.signup-login-btn {
+    border-radius: 10px;
+    background: var(--primary-btn-col-2);
+    box-shadow: 0px 4px 61px 0px rgba(77, 71, 195, 0.40);
+    color: #fff;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    /* padding: 13px 15px; */
+    font-size: 16px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    height: 49px;
+}
+
+.btn-container button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    background: transparent;
+    transition: all 0.3s ease-in-out;
+}
+
+.flex-centered{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .default-disabled {
     display: none;
+}
+
+.disabled-input {
+    cursor: not-allowed !important;
+    background: var(--disabled-input-bg-col) !important;
 }
 
 .show-dropdown {
