@@ -6,11 +6,13 @@ import { Link } from 'react-router-dom';
 import DottedLoader from './DottedLoader';
 
 
-export default function Register() {
+export default function Register(props) {
     const [userName, setUserName] = useState('');
-    const [phoneNo, setPhoneNo] = useState();
+    const [phoneNo, setPhoneNo] = useState('');
     const [formError, setFormError] = useState({})
     const [showLoader, setShowLoader] = useState(false)
+
+    const { validateField, validatePassword, registerUser } = props;
 
     const fNameRef = useRef('');
     const lNameRef = useRef('');
@@ -26,23 +28,28 @@ export default function Register() {
     };
 
     const checkPhoneNo = () => {
-        const possibleNo = isPossiblePhoneNumber(phoneNo);
-        if (possibleNo) {
-            setErrorDataField('phone', undefined);  // Reset Error msg
-            const parseNo = parsePhoneNumber(phoneNo)
-            if (parseNo) {
-                // console.log(parseNo.country)
-                const countryCode = getCountryCallingCode(parseNo.country);
-                const nationalNumber = parseNo.nationalNumber;
-                // console.log(countryCode)
-                // console.log(parseNo.nationalNumber)
-                return { countryCode, nationalNumber };
+        if (phoneNo && phoneNo.trim().length !== 0) {
+            const possibleNo = isPossiblePhoneNumber(phoneNo);
+            if (possibleNo) {
+                setErrorDataField('phone', undefined);  // Reset Error msg
+                const parseNo = parsePhoneNumber(phoneNo)
+                if (parseNo) {
+                    // console.log(parseNo.country)
+                    const countryCode = getCountryCallingCode(parseNo.country);
+                    const nationalNumber = parseNo.nationalNumber;
+                    // console.log(countryCode)
+                    // console.log(parseNo.nationalNumber)
+                    return { countryCode, nationalNumber };
+                } else {
+                    setErrorDataField('phone', 'Please enter a valid phone number');
+                    return;
+                }
             } else {
                 setErrorDataField('phone', 'Please enter a valid phone number');
                 return;
             }
         } else {
-            setErrorDataField('phone', 'Please enter a valid phone number');
+            setErrorDataField('phone', 'This field cannot be empty')
             return;
         }
     }
@@ -54,10 +61,27 @@ export default function Register() {
         const lName = lNameRef.current.value;
         const email = emailRef.current.value;
         const password = passwordRef.current.value;
-        console.log({fName, lName, email, password})
-        const phone = checkPhoneNo();
-        if (phone) {
-            console.log(phone)
+
+        const validateFirstNameResult = validateField('fName', fName, 2, 'Name', setErrorDataField);
+        const validateLastNameResult = validateField('lName', lName, 2, 'Name', setErrorDataField);
+        const validatePasswordResult = validatePassword(password, 8, setErrorDataField);
+        const validatePhoneResult = checkPhoneNo();
+        if (validateFirstNameResult && validateLastNameResult && validatePasswordResult && validatePhoneResult) {
+            // console.log(validatePhoneResult)
+            // console.log({ fName, lName, email, password })
+            const countryCode = Number.parseInt(validatePhoneResult.countryCode);
+            const nationalNumber = Number.parseInt(validatePhoneResult.nationalNumber);
+            const newUserData = {
+                username: userName,
+                firstName: fName,
+                lastName: lName,
+                email,
+                password,
+                countryCode,
+                mobile: nationalNumber,
+            }
+            console.log(newUserData)
+            registerUser(newUserData)
         }
         setShowLoader(false);
     }
@@ -78,10 +102,11 @@ export default function Register() {
                             <input type="text" name='firstName' ref={fNameRef} placeholder='First Name' required />
                             <input type="text" name='lastName' ref={lNameRef} placeholder='Last Name' required />
                         </div>
+                        <p className="error-text">{formError.fName || formError.lName}</p>
                         <input type="email" name='email' ref={emailRef} onChange={e => setUserName(e.target.value)} placeholder='Email Address' required />
                         <p className="error-text"></p>
                         <input type="password" name="password" ref={passwordRef} placeholder="Password" required />
-                        <p className="error-text"></p>
+                        <p className="error-text">{formError.password}</p>
                         <div className="phone-input-container">
                             <PhoneInput placeholder="Enter phone number" value={phoneNo} onChange={setPhoneNo} />
                             <p className="error-text">{formError.phone}</p>

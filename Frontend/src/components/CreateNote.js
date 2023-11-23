@@ -3,7 +3,7 @@ import penImg from '../assests/pen.webp'
 import axios from 'axios';
 
 export default function CreateNote(props) {
-    const { onClose } = props;
+    const { validateField, onClose } = props;
     const [shouldCloseModal, setShouldCloseModal] = useState(false);
     const [notePriority, setNotePriority] = useState(undefined);
     const [formError, setFormError] = useState({})
@@ -35,19 +35,6 @@ export default function CreateNote(props) {
     //     })
     // }
 
-    const validateField = (fieldName, value, minLength, errorMessage) => {
-        if (!value || value.trim() === '' || value.trim().length === 0) {
-            setErrorDataField(fieldName, `Please enter ${errorMessage}`);
-            return false;
-        } else if (value.trim().length < minLength) {
-            setErrorDataField(fieldName, `${errorMessage} should be at least ${minLength} characters long`);
-            return false;
-        } else {
-            setErrorDataField(fieldName, undefined);
-            return true;
-        }
-    };
-
     const submitForm = (e) => {
         e.preventDefault();
         let newFormData = {};
@@ -56,7 +43,7 @@ export default function CreateNote(props) {
         console.log(content.trim().length)
         const category = categoryRef.current.value;
         const priority = notePriority;
-        const isTitleValid = validateField('title', title, 3, 'Title');
+        const isTitleValid = validateField('title', title, 3, 'Title', setErrorDataField);
         // if (title && title.trim() !== "") {
         //     if (title.trim().length < 3 || title.trim().length === 0) {
         //         setErrorDataField('title', "Title should be at least 3 characters long");
@@ -65,7 +52,7 @@ export default function CreateNote(props) {
         //         setErrorDataField('title', undefined);
         //     }
         // }
-        const isContentValid = validateField('content', content, 5, 'Content')
+        const isContentValid = validateField('content', content, 5, 'Content', setErrorDataField)
         // if (content && content.trim() !== "") {
         //     if (content.trim().length < 5) {
         //         setErrorDataField('content', "Content should be at least 5 characters long");
@@ -74,7 +61,7 @@ export default function CreateNote(props) {
         //         setErrorDataField('content', undefined);
         //     }
         // }
-        const isCategoryValid = validateField('category', category, 1, 'Category')
+        const isCategoryValid = validateField('category', category, 1, 'Category', setErrorDataField)
         // if (!category || category.trim() === "") {
         //     setErrorDataField('category', "Please choose a note category");
         // } else {
