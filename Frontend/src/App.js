@@ -19,7 +19,7 @@ function App() {
   const [isCreateNoteModalOpen, setCreateNoteModalOpen] = useState(false);
   const [isEditNoteModalOpen, setEditNoteModalOpen] = useState(false);
 
-  const registerURL = process.env.REACT_APP_REGISTER_UR;
+  const registerURL = process.env.REACT_APP_REGISTER_URL;
 
   const openCreateNoteModal = () => {
     setCreateNoteModalOpen(true);
@@ -102,7 +102,7 @@ function App() {
   const registerUser = async (newUserData) => {
     try {
       // Convert the user data object to a JSON string
-      const userData = JSON.stringify(newUserData);console.log(registerURL)
+      const userData = JSON.stringify(newUserData);
 
       // Create a new user
       const response = await axios.post(registerURL, userData, {
