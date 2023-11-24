@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const editableDataSlice = createSlice({
     name: "editableData",
     initialState: {
-        data: {}
+        editableData: {}
     },
     reducers: {
         setEditableData: (state, action) => {
@@ -14,35 +14,17 @@ export const editableDataSlice = createSlice({
                 category: action.payload.category,
                 priority: action.payload.priority
             }
-            state.data = newData;
-            //return {...action.payload};
+            state.editableData = newData;
         },
-        // addItemToEditableData: (state, action) => {
-        //     state.push(action.payload);
-        // },
-        // updateItemInEditableData: (state, action) => {
-        //     let index = state.findIndex((item) => item._id === action.payload._id);
-        //     if (index !== -1) {
-        //         Object.assign(state[index], action.payload);
-        //     } else {
-        //         console.log("No Item Found");
-        //     }
 
-        // },
-        deleteItemFromEditableData: (state, action) => {
-            state.data = {};
-            // let index = state.findIndex((item) => item._id === action.payload._id);
-            // if (index !== -1) {
-            //     state.splice(index, 1);
-            // } else {
-            //     console.log("No Item Found");
-            // }
+        deleteEditableData: (state, action) => {
+            state.editableData = {};
         },
 
     },
 });
 
 // Action creators are generated for each case reducer function
-export const { setEditableData, deleteItemFromEditableData } = editableDataSlice.actions;
+export const { setEditableData, deleteEditableData } = editableDataSlice.actions;
 
 export default editableDataSlice.reducer;

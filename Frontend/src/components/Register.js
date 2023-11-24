@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import 'react-phone-number-input/style.css'
 import PhoneInput, { isPossiblePhoneNumber, parsePhoneNumber, getCountryCallingCode } from 'react-phone-number-input'
 import logoW from '../assests/logo-W.png'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import DottedLoader from './DottedLoader';
 
 
@@ -13,6 +13,7 @@ export default function Register(props) {
     const [showLoader, setShowLoader] = useState(false)
 
     const { validateField, validatePassword, registerUser } = props;
+    const navigate = useNavigate();
 
     const fNameRef = useRef('');
     const lNameRef = useRef('');
@@ -34,11 +35,8 @@ export default function Register(props) {
                 setErrorDataField('phone', undefined);  // Reset Error msg
                 const parseNo = parsePhoneNumber(phoneNo)
                 if (parseNo) {
-                    // console.log(parseNo.country)
                     const countryCode = getCountryCallingCode(parseNo.country);
                     const nationalNumber = parseNo.nationalNumber;
-                    // console.log(countryCode)
-                    // console.log(parseNo.nationalNumber)
                     return { countryCode, nationalNumber };
                 } else {
                     setErrorDataField('phone', 'Please enter a valid phone number');
@@ -54,36 +52,58 @@ export default function Register(props) {
         }
     }
 
-    const submitForm = (e) => {
-        e.preventDefault();
-        setShowLoader(true);
-        const fName = fNameRef.current.value;
-        const lName = lNameRef.current.value;
-        const email = emailRef.current.value;
-        const password = passwordRef.current.value;
+    const submitForm = async (e) => {
+        try {
+            e.preventDefault();
+            setShowLoader(true);
 
-        const validateFirstNameResult = validateField('fName', fName, 2, 'Name', setErrorDataField);
-        const validateLastNameResult = validateField('lName', lName, 2, 'Name', setErrorDataField);
-        const validatePasswordResult = validatePassword(password, 8, setErrorDataField);
-        const validatePhoneResult = checkPhoneNo();
-        if (validateFirstNameResult && validateLastNameResult && validatePasswordResult && validatePhoneResult) {
-            // console.log(validatePhoneResult)
-            // console.log({ fName, lName, email, password })
-            const countryCode = Number.parseInt(validatePhoneResult.countryCode);
-            const nationalNumber = Number.parseInt(validatePhoneResult.nationalNumber);
-            const newUserData = {
-                username: userName,
-                firstName: fName,
-                lastName: lName,
-                email,
-                password,
-                countryCode,
-                mobile: nationalNumber,
+            // Resetting specific error field
+            setErrorDataField('username', undefined);
+            setErrorDataField('email', undefined);
+
+            const fName = fNameRef.current.value;
+            const lName = lNameRef.current.value;
+            const email = emailRef.current.value;
+            const password = passwordRef.current.value;
+
+            const validateFirstNameResult = validateField('fName', fName, 2, 'Name', setErrorDataField);
+            const validateLastNameResult = validateField('lName', lName, 2, 'Name', setErrorDataField);
+            const validatePasswordResult = validatePassword(password, 8, setErrorDataField);
+            const validatePhoneResult = checkPhoneNo();
+
+            if (validateFirstNameResult && validateLastNameResult && validatePasswordResult && validatePhoneResult) {
+                const countryCode = Number.parseInt(validatePhoneResult.countryCode);
+                const nationalNumber = Number.parseInt(validatePhoneResult.nationalNumber);
+                const newUserData = {
+                    username: userName,
+                    firstName: fName,
+                    lastName: lName,
+                    email,
+                    password,
+                    countryCode,
+                    mobile: nationalNumber,
+                }
+
+                // Sending data to API
+                const responseData = await registerUser(newUserData);
+                const { success, message } = responseData;
+
+                if (success !== undefined && success === true) {
+
+                    // Redirect to the dashboard
+                    navigate("/");
+                }
+
+                else if (success !== undefined && success === false) {
+                    setErrorDataField('username', message);
+                    setErrorDataField('email', message);
+                }
             }
-            console.log(newUserData)
-            registerUser(newUserData)
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setShowLoader(false);
         }
-        setShowLoader(false);
     }
 
     return (
@@ -97,14 +117,14 @@ export default function Register(props) {
                     </header>
                     <form id='register-form' onSubmit={submitForm}>
                         <input type="text" className='disabled-input' name="username" value={userName} placeholder="Username" disabled />
-                        <p className="error-text"></p>
+                        <p className="error-text">{formError.username}</p>
                         <div id="signup-name">
                             <input type="text" name='firstName' ref={fNameRef} placeholder='First Name' required />
                             <input type="text" name='lastName' ref={lNameRef} placeholder='Last Name' required />
                         </div>
                         <p className="error-text">{formError.fName || formError.lName}</p>
                         <input type="email" name='email' ref={emailRef} onChange={e => setUserName(e.target.value)} placeholder='Email Address' required />
-                        <p className="error-text"></p>
+                        <p className="error-text">{formError.email}</p>
                         <input type="password" name="password" ref={passwordRef} placeholder="Password" required />
                         <p className="error-text">{formError.password}</p>
                         <div className="phone-input-container">

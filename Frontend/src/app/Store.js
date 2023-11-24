@@ -1,8 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import editableDataReducer from "./features/editableData/editableDataSlice";
+import rootReducer from './index.js'
 
 export const store = configureStore({
-    reducer: {
-        [editableDataReducer.name]: editableDataReducer,
-    },
+    reducer: rootReducer
 });

@@ -3,8 +3,10 @@ import React, { useState } from 'react';
 import {
   BrowserRouter,
   Routes,
-  Route
+  Route,
+  Navigate
 } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
 import MainContent from './components/MainContent';
 //import Navbar from './components/Navbar';
@@ -13,6 +15,7 @@ import EditNote from './components/EditNote';
 import Register from './components/Register';
 import LogIn from './components/LogIn';
 import axios from 'axios';
+import { login } from './app/features/loggedInStatus/loggedInStatusSlice';
 
 
 function App() {
@@ -20,6 +23,11 @@ function App() {
   const [isEditNoteModalOpen, setEditNoteModalOpen] = useState(false);
 
   const registerURL = process.env.REACT_APP_REGISTER_URL;
+  const loginURL = process.env.REACT_APP_LOGIN_URL;
+
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector(state => state.loggedInStatus.isLoggedIn);
+  // console.log(loggedInStatus)
 
   const openCreateNoteModal = () => {
     setCreateNoteModalOpen(true);
@@ -110,10 +118,62 @@ function App() {
           'Content-Type': 'application/json'
         }
       })
-      console.log(response)
+      // console.log(response)
+      const responseData = response.data;
+
       // If the user was created successfully, redirect to the login page
+      if (response.status === 201 && responseData.success === true) {
+        dispatch(login({
+          username: newUserData.username,
+          fName: newUserData.firstName,
+          lName: newUserData.lastName,
+        }))
+        // window.location.href = loginURL;
+        return responseData;
+      }
     } catch (error) {
-      console.log(error)
+      console.log(error.message)
+
+      const statusCode = error.response.status;
+      const responseData = error.response.data;
+      if (statusCode === 400 && responseData.success === false) {
+
+        // If the user was not created successfully, display an error message
+        return responseData;
+      }
+    }
+  }
+
+  const loginUser = async (existingUserData) => {
+    try {
+      // Convert the user data object to a JSON string
+      const userData = JSON.stringify(existingUserData);
+
+      // Create a new user
+      const response = await axios.post(loginURL, userData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      // console.log(response)
+      const responseData = response.data;
+
+      // If the user was created successfully, redirect to the login page
+      if (response.status === 200 && responseData.success === true) {
+        dispatch(login(responseData.userData))
+        // window.location.href = loginURL;
+        return responseData;
+      }
+    } catch (error) {
+      console.log(error.message)
+
+      const statusCode = error.response.status;
+      const responseData = error.response.data;
+      if ((statusCode === 400 || statusCode === 401) && responseData.success === false) {
+
+        // If the user was not created successfully, display an error message
+        return responseData;
+      }
     }
   }
 
@@ -121,9 +181,9 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<MainContent onCreateOpen={openCreateNoteModal} onEditOpen={openEditNoteModal} />} />
-          <Route path='/register' element={<Register validateField={validateField} validatePassword={validatePassword} registerUser={registerUser} />} />
-          <Route path="/login" element={<LogIn validateField={validateField} validatePassword={validatePassword} />} />
+          <Route path="/" element={isLoggedIn ? <MainContent onCreateOpen={openCreateNoteModal} onEditOpen={openEditNoteModal} /> : <Navigate to={"/register"} />} />
+          <Route path='/register' element={isLoggedIn ? <Navigate to={"/"} /> : <Register validateField={validateField} validatePassword={validatePassword} registerUser={registerUser} />} />
+          <Route path="/login" element={isLoggedIn ? <Navigate to={"/"} /> : <LogIn validateField={validateField} validatePassword={validatePassword} loginUser={loginUser} />} />
         </Routes>
         {isCreateNoteModalOpen && <CreateNote validateField={validateField} onClose={closeCreateNoteModal} />}
         {isEditNoteModalOpen && <EditNote onClose={closeEditNoteModal} />}

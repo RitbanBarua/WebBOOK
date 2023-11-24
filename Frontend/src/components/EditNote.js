@@ -6,11 +6,11 @@ import { useSelector } from 'react-redux';
 export default function EditNote(props) {
     const { onClose } = props;
     const [shouldCloseModal, setShouldCloseModal] = useState(false);
-    const [editableData, setEditableData] = useState({})
+    // const [editableData, setEditableData] = useState({})
     const [formError, setFormError] = useState({})
 
 
-    const data = useSelector(state => state.reducer.data)
+    const data = useSelector(state => state.editableNoteData.editableData)
     const [noteData, setNoteData] = useState(data);
 
     const setNoteDataField = (fieldName, value) => {
@@ -59,8 +59,8 @@ export default function EditNote(props) {
     };
 
     useEffect(() => {
-        setEditableData(data)
-        console.log(data)
+        // setEditableData(data)
+        setNoteDataField(data)
     }, [data])
 
     useEffect(() => {
@@ -83,7 +83,6 @@ export default function EditNote(props) {
         setShouldCloseModal(false);
     };
 
-    console.log(editableData)
 
     return (
         <div className="modal-background" onClick={() => setShouldCloseModal(true)}>
@@ -133,7 +132,7 @@ export default function EditNote(props) {
                     </div>
                     <div className='btn-container'>
                         <button type="reset" onClick={onClose}>Cancel</button>
-                        <button type='submit'>Submit</button>
+                        <button type='submit'>Update</button>
                     </div>
                 </form>
             </div>

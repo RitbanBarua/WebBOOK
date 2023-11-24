@@ -73,7 +73,7 @@ export default function MainContent(props) {
                     <Note title={demoData.title} content={demoData.content} category={demoData.category} priority={demoData.priority} onEditOpen={onEditOpen} />
                     <Note title={demoData.title} content={demoData.content} category={demoData.category} priority={demoData.priority} onEditOpen={onEditOpen} />
                     <Note title={demoData.title} content={demoData.content} category={demoData.category} priority={demoData.priority} onEditOpen={onEditOpen} />
-                    <Note title={demoData.title} content={demoData.content} category={demoData.category} priority={demoData.priority} onEditOpen={onEditOpen} />
+                    <Note title="title" content="{demoData.content}" category="{demoData.category}" priority="medium" onEditOpen={onEditOpen} />
                     <div className="note-container add-note-container">
 
                         <button onClick={onCreateOpen}>
