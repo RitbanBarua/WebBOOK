@@ -1,5 +1,6 @@
 // import logo from './logo.svg';
 import React, { useState } from 'react';
+import CryptoJS from 'crypto-js';
 import {
   BrowserRouter,
   Routes,
@@ -15,15 +16,19 @@ import EditNote from './components/EditNote';
 import Register from './components/Register';
 import LogIn from './components/LogIn';
 import axios from 'axios';
-import { login } from './app/features/loggedInStatus/loggedInStatusSlice';
+import { login, logout } from './app/features/loggedInStatus/loggedInStatusSlice';
+import { setUserNotes } from './app/features/userNotes/userNotesSlice';
 
 
 function App() {
   const [isCreateNoteModalOpen, setCreateNoteModalOpen] = useState(false);
   const [isEditNoteModalOpen, setEditNoteModalOpen] = useState(false);
 
+  const cryptoKey = process.env.REACT_APP_SECRET_CRYPTO_KEY;
   const registerURL = process.env.REACT_APP_REGISTER_URL;
   const loginURL = process.env.REACT_APP_LOGIN_URL;
+  const getUserNotesURL = process.env.REACT_APP_GET_NOTES_URL;
+  const createNoteURL = process.env.REACT_APP_CREATE_NOTE_URL;
 
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(state => state.loggedInStatus.isLoggedIn);
@@ -107,6 +112,7 @@ function App() {
     return true;
   }
 
+
   const registerUser = async (newUserData) => {
     try {
       // Convert the user data object to a JSON string
@@ -123,12 +129,20 @@ function App() {
 
       // If the user was created successfully, redirect to the login page
       if (response.status === 201 && responseData.success === true) {
-        dispatch(login({
-          username: newUserData.username,
-          fName: newUserData.firstName,
-          lName: newUserData.lastName,
-        }))
-        // window.location.href = loginURL;
+        const userData = JSON.stringify(
+          {
+            username: newUserData.username,
+            firstName: newUserData.firstName,
+            lastName: newUserData.lastName,
+          }
+        )
+
+        // Encrypting User Data
+        const encryptedUserData = CryptoJS.AES.encrypt(userData, cryptoKey).toString();
+
+        // Dispatching encrypted user data
+        dispatch(login(encryptedUserData))
+
         return responseData;
       }
     } catch (error) {
@@ -143,6 +157,7 @@ function App() {
       }
     }
   }
+
 
   const loginUser = async (existingUserData) => {
     try {
@@ -160,8 +175,14 @@ function App() {
 
       // If the user was created successfully, redirect to the login page
       if (response.status === 200 && responseData.success === true) {
-        dispatch(login(responseData.userData))
-        // window.location.href = loginURL;
+        const userData = JSON.stringify(responseData.userData)
+
+        // Encrypting User Data
+        const encryptedUserData = CryptoJS.AES.encrypt(userData, cryptoKey).toString();
+
+        // Dispatching encrypted user data
+        dispatch(login(encryptedUserData))
+
         return responseData;
       }
     } catch (error) {
@@ -177,11 +198,60 @@ function App() {
     }
   }
 
+
+  const logoutUser = () => {
+    dispatch(logout())
+  }
+
+
+  const getUserNotes = async () => {
+    try {
+      const response = await axios.get(getUserNotesURL, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      const responseData = response.data;
+
+      // If user notes found
+      if (response.status === 200 && responseData.success === true) {
+        const userNotes = responseData.userNotes;
+        dispatch(setUserNotes(userNotes));
+        return userNotes;
+      }
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  const createNote = async (formData) => {
+    try {
+      // Convert the form data object to a JSON string
+      const formDataJSON = JSON.stringify(formData);
+
+      // Send a POST request with the JSON data
+      const response = await axios.post(createNoteURL, formDataJSON, {
+        headers: {
+          "Content-Type": 'application/json',
+        }
+      })
+      const responseData = response.data;
+
+      // If the new note created successfully
+      if (response.status === 201 && responseData.success === true) {
+        return responseData;
+      }
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={isLoggedIn ? <MainContent onCreateOpen={openCreateNoteModal} onEditOpen={openEditNoteModal} /> : <Navigate to={"/register"} />} />
+          <Route path="/" element={isLoggedIn ? <MainContent getUserNotes={getUserNotes} onCreateOpen={openCreateNoteModal} onEditOpen={openEditNoteModal} /> : <Navigate to={"/register"} />} />
           <Route path='/register' element={isLoggedIn ? <Navigate to={"/"} /> : <Register validateField={validateField} validatePassword={validatePassword} registerUser={registerUser} />} />
           <Route path="/login" element={isLoggedIn ? <Navigate to={"/"} /> : <LogIn validateField={validateField} validatePassword={validatePassword} loginUser={loginUser} />} />
         </Routes>

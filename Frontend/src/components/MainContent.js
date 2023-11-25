@@ -1,11 +1,24 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
+import CryptoJS from 'crypto-js';
 import Note from './Note'
 import axios from 'axios'
 import Navbar from './Navbar';
 
 export default function MainContent(props) {
-    const { onCreateOpen, onEditOpen } = props;
+    const { getUserNotes, onCreateOpen, onEditOpen } = props;
+
+    const cryptoKey = process.env.REACT_APP_SECRET_CRYPTO_KEY;
+
+    //const isLoggedIn = useSelector(state => state.loggedInStatus.isLoggedIn);
+    const encryptedUserData = useSelector(state => state.loggedInStatus.user);
+    const decryptedUserData = JSON.parse(CryptoJS.AES.decrypt(encryptedUserData, cryptoKey).toString(CryptoJS.enc.Utf8));
+
     const [dailyQuote, setDailyQuote] = useState()
+    //const [notes, setNotes] = useState([])
+    //const [userData, setUserData] = useState(decryptedUserData)
+    const userData = decryptedUserData;
+
 
     const fetchDailyQuote = async () => {
         try {
@@ -41,6 +54,7 @@ export default function MainContent(props) {
 
     useEffect(() => {
         fetchDailyQuote();
+        getUserNotes();
     }, [])
 
 
@@ -50,7 +64,7 @@ export default function MainContent(props) {
             <header>
                 <div className="header-container">
                     <div id="header-left">
-                        <p>Welcome Back! <span>Mr. Ashutosh</span></p>
+                        <p id='greetings-para'>Welcome Back! <span>{userData.firstName}</span></p>
                     </div>
                     <div id="header-mid">
                         {(dailyQuote) ? <div className="left-container">

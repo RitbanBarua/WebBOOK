@@ -40,34 +40,14 @@ export default function CreateNote(props) {
         let newFormData = {};
         const title = titleRef.current.value;
         const content = contentRef.current.value;
-        console.log(content.trim().length)
+        //console.log(content.trim().length)
         const category = categoryRef.current.value;
         const priority = notePriority;
+
         const isTitleValid = validateField('title', title, 3, 'Title', setErrorDataField);
-        // if (title && title.trim() !== "") {
-        //     if (title.trim().length < 3 || title.trim().length === 0) {
-        //         setErrorDataField('title', "Title should be at least 3 characters long");
-        //     } else {
-        //         newFormData.title = title.trim()
-        //         setErrorDataField('title', undefined);
-        //     }
-        // }
         const isContentValid = validateField('content', content, 5, 'Content', setErrorDataField)
-        // if (content && content.trim() !== "") {
-        //     if (content.trim().length < 5) {
-        //         setErrorDataField('content', "Content should be at least 5 characters long");
-        //     } else {
-        //         newFormData.content = content.trim()
-        //         setErrorDataField('content', undefined);
-        //     }
-        // }
         const isCategoryValid = validateField('category', category, 1, 'Category', setErrorDataField)
-        // if (!category || category.trim() === "") {
-        //     setErrorDataField('category', "Please choose a note category");
-        // } else {
-        //     newFormData.category = category.trim()
-        //     setErrorDataField('category', undefined);
-        // }
+  
 
         if (isTitleValid && isContentValid && isCategoryValid) {
             newFormData.title = title.trim();
