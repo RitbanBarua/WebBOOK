@@ -17,7 +17,7 @@ import Register from './components/Register';
 import LogIn from './components/LogIn';
 import axios from 'axios';
 import { login, logout } from './app/features/loggedInStatus/loggedInStatusSlice';
-import { setUserNotes } from './app/features/userNotes/userNotesSlice';
+import { addUserNote, setUserNotes } from './app/features/userNotes/userNotesSlice';
 
 
 function App() {
@@ -122,7 +122,8 @@ function App() {
       const response = await axios.post(registerURL, userData, {
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        withCredentials: true,
       })
       // console.log(response)
       const responseData = response.data;
@@ -168,7 +169,8 @@ function App() {
       const response = await axios.post(loginURL, userData, {
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        withCredentials: true,
       })
       // console.log(response)
       const responseData = response.data;
@@ -209,7 +211,8 @@ function App() {
       const response = await axios.get(getUserNotesURL, {
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        withCredentials: true,
       })
       const responseData = response.data;
 
@@ -224,7 +227,7 @@ function App() {
     }
   }
 
-  const createNote = async (formData) => {
+  const createUserNote = async (formData) => {
     try {
       // Convert the form data object to a JSON string
       const formDataJSON = JSON.stringify(formData);
@@ -233,12 +236,15 @@ function App() {
       const response = await axios.post(createNoteURL, formDataJSON, {
         headers: {
           "Content-Type": 'application/json',
-        }
+        },
+        withCredentials: true,
       })
       const responseData = response.data;
 
       // If the new note created successfully
       if (response.status === 201 && responseData.success === true) {
+        const newNote = responseData.newNote;
+        dispatch(addUserNote(newNote))
         return responseData;
       }
     } catch (error) {
@@ -255,7 +261,7 @@ function App() {
           <Route path='/register' element={isLoggedIn ? <Navigate to={"/"} /> : <Register validateField={validateField} validatePassword={validatePassword} registerUser={registerUser} />} />
           <Route path="/login" element={isLoggedIn ? <Navigate to={"/"} /> : <LogIn validateField={validateField} validatePassword={validatePassword} loginUser={loginUser} />} />
         </Routes>
-        {isCreateNoteModalOpen && <CreateNote validateField={validateField} onClose={closeCreateNoteModal} />}
+        {isCreateNoteModalOpen && <CreateNote validateField={validateField} createUserNote={createUserNote} onClose={closeCreateNoteModal} />}
         {isEditNoteModalOpen && <EditNote onClose={closeEditNoteModal} />}
       </BrowserRouter>
     </>

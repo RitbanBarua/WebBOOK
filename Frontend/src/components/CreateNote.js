@@ -3,7 +3,7 @@ import penImg from '../assests/pen.webp'
 import axios from 'axios';
 
 export default function CreateNote(props) {
-    const { validateField, onClose } = props;
+    const { validateField, createUserNote, onClose } = props;
     const [shouldCloseModal, setShouldCloseModal] = useState(false);
     const [notePriority, setNotePriority] = useState(undefined);
     const [formError, setFormError] = useState({})
@@ -35,7 +35,7 @@ export default function CreateNote(props) {
     //     })
     // }
 
-    const submitForm = (e) => {
+    const submitForm = async (e) => {
         e.preventDefault();
         let newFormData = {};
         const title = titleRef.current.value;
@@ -44,9 +44,9 @@ export default function CreateNote(props) {
         const category = categoryRef.current.value;
         const priority = notePriority;
 
-        const isTitleValid = validateField('title', title, 3, 'Title', setErrorDataField);
-        const isContentValid = validateField('content', content, 5, 'Content', setErrorDataField)
-        const isCategoryValid = validateField('category', category, 1, 'Category', setErrorDataField)
+        const isTitleValid = await validateField('title', title, 3, 'Title', setErrorDataField);
+        const isContentValid = await validateField('content', content, 5, 'Content', setErrorDataField)
+        const isCategoryValid = await validateField('category', category, 1, 'Category', setErrorDataField)
   
 
         if (isTitleValid && isContentValid && isCategoryValid) {
@@ -56,11 +56,9 @@ export default function CreateNote(props) {
             if (priority) {
                 newFormData.priority = priority;
             }
+            const responseData = await createUserNote(newFormData)
+            console.log(responseData)
         }
-
-        // Convert the form data object to a JSON string
-        const formDataJSON = JSON.stringify(newFormData);
-        console.log(formDataJSON)
     }
 
     useEffect(() => {
