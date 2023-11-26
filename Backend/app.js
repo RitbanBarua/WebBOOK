@@ -173,7 +173,7 @@ app.post("/notes/new", authUser, [
         const userId = req.userData.id;
         const { title, content, category, priority } = req.body;
         const newNote = await Note.create({ title, content, category, priority, author: userId });
-        res.status(201).json({ success: true, message: "New Note Created Successfully!" });
+        res.status(201).json({ success: true, message: "New Note Created Successfully!", newNote: newNote });
     } catch (error) {
         res.status(500).json({ success: false, message: "Internal Server Error!", error: error });
     }
