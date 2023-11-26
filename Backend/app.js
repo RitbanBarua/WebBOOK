@@ -15,6 +15,11 @@ import 'dotenv/config';
 const app = express();
 const port = process.env.PORT || 5000;
 const saltRounds = 10;
+ const corsOptions = {
+     origin: ['https://web-book-app.vercel.app', 'http://localhost:3000'],
+     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+     credentials: true,
+ };
 
 // Define a custom password validation rule
 // const validatePassword = (value) => {
@@ -30,7 +35,7 @@ const saltRounds = 10;
 
 connectToMongo();
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -77,7 +82,7 @@ app.post("/register", [
             profilePicture: profilePicture
         })
         const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: '1h' });
-        res.cookie('jwt', token, { httpOnly: true, secure: true }).status(201).json({ success: true, message: "New User Created Successfully!" });
+        res.cookie('jwt', token, { httpOnly: true, secure: true, sameSite: 'None' }).status(201).json({ success: true, message: "New User Created Successfully!" });
     } catch (error) {
         res.status(500).json({ success: false, message: "Internal Server Error!", error: error })
     }
@@ -130,7 +135,7 @@ app.post('/login', [
         }
 
         // Send the JWT token and user data as a response
-        res.cookie('jwt', token, { httpOnly: true, secure: true }).status(200).json({ success: true, message: "Logged In Successfully!", userData: userData });
+        res.cookie('jwt', token, { httpOnly: true, secure: true, sameSite: 'None' }).status(200).json({ success: true, message: "Logged In Successfully!", userData: userData });
     } catch (error) {
         res.status(500).json({ success: false, message: "Internal Server Error!", error: error })
     }
