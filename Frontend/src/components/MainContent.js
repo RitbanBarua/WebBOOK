@@ -23,7 +23,7 @@ export default function MainContent(props) {
 
     const fetchDailyQuote = async () => {
         try {
-            const fetchingQuote = await axios.get("http://localhost:5000/daily-quote");
+            const fetchingQuote = await axios.get("https://web-book-api.vercel.app/daily-quote");
             const fetchedQuote = fetchingQuote.data;
             if (fetchedQuote) {
                 setDailyQuote(fetchedQuote);
@@ -32,26 +32,6 @@ export default function MainContent(props) {
             console.log('Error in Fetching Quotes', error);
         }
     }
-
-    // const demoData = {
-    //     "_id": {
-    //         "$oid": "65466604fee1dad7d2c5f84d"
-    //     },
-    //     "title": "note title 2",
-    //     "content": "note content totally! 😄",
-    //     "category": "general",
-    //     "priority": "low",
-    //     "author": {
-    //         "$oid": "654606c92d890612af175bc6"
-    //     },
-    //     "createdAt": {
-    //         "$date": "2023-11-04T15:40:52.795Z"
-    //     },
-    //     "updatedAt": {
-    //         "$date": "2023-11-04T15:40:52.795Z"
-    //     },
-    //     "__v": 0
-    // }
 
     useEffect(() => {
         fetchDailyQuote();
@@ -91,11 +71,6 @@ export default function MainContent(props) {
                         )
                      })
                      : undefined}
-                    {/* <Note title={demoData.title} content={demoData.content} category={demoData.category} priority={demoData.priority} onEditOpen={onEditOpen} />
-                    <Note title={demoData.title} content={demoData.content} category={demoData.category} priority={demoData.priority} onEditOpen={onEditOpen} />
-                    <Note title={demoData.title} content={demoData.content} category={demoData.category} priority={demoData.priority} onEditOpen={onEditOpen} />
-                    <Note title={demoData.title} content={demoData.content} category={demoData.category} priority={demoData.priority} onEditOpen={onEditOpen} />
-                    <Note title="title" content="{demoData.content}" category="{demoData.category}" priority="medium" onEditOpen={onEditOpen} /> */}
                     <div className="note-container add-note-container">
 
                         <button onClick={onCreateOpen}>

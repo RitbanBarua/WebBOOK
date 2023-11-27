@@ -41,7 +41,7 @@ export default function LogIn(props) {
           password
         }
         const responseData = await loginUser(existingUserData);
-        const { success, message } = responseData;
+        const { success, message, errors } = responseData;
 
         if (success !== undefined && success === true) {
 
@@ -50,8 +50,14 @@ export default function LogIn(props) {
         }
 
         else if (success !== undefined && success === false) {
-          setErrorDataField('email', message);
-          setErrorDataField('password', message);
+          if (message) {
+            setErrorDataField('username', message);
+            setErrorDataField('email', message);
+          } else if (errors) {
+            const errorMessage = errors[0].msg;
+            setErrorDataField('username', errorMessage);
+            setErrorDataField('email', errorMessage);
+          }
         }
       }
     } catch (error) {

@@ -86,7 +86,7 @@ export default function Register(props) {
 
                 // Sending data to API
                 const responseData = await registerUser(newUserData);
-                const { success, message } = responseData;
+                const { success, message, errors } = responseData;
 
                 if (success !== undefined && success === true) {
 
@@ -95,8 +95,14 @@ export default function Register(props) {
                 }
 
                 else if (success !== undefined && success === false) {
-                    setErrorDataField('username', message);
-                    setErrorDataField('email', message);
+                    if (message) {
+                        setErrorDataField('username', message);
+                        setErrorDataField('email', message);
+                    } else if (errors) {
+                        const errorMessage = errors[0].msg;
+                        setErrorDataField('username', errorMessage);
+                        setErrorDataField('email', errorMessage);
+                    }
                 }
             }
         } catch (error) {
