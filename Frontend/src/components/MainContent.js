@@ -65,7 +65,7 @@ export default function MainContent(props) {
             <main>
                 <div id="notes-container">
                     {(userNotes && userNotes.length !== 0) ? 
-                     userNotes.forEach(note => {
+                     userNotes.map(note => {
                         return(
                             <Note title={note.title} content={note.content} category={note.category} priority={note.priority} onEditOpen={onEditOpen} />
                         )

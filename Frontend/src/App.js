@@ -218,7 +218,7 @@ function App() {
 
       // If user notes found
       if (response.status === 200 && responseData.success === true) {
-        const userNotes = responseData.userNotes;
+        const userNotes = responseData.notes;
         dispatch(setUserNotes(userNotes));
         return userNotes;
       }

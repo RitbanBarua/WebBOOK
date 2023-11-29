@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
 import penImg from '../assests/pen.webp'
-import axios from 'axios';
 
 export default function CreateNote(props) {
     const { validateField, createUserNote, onClose } = props;
@@ -23,41 +22,33 @@ export default function CreateNote(props) {
         }));
     };
 
-    // const createNote = async (formData) => {
-    //     // Convert the form data object to a JSON string
-    //     const formDataJSON = JSON.stringify(formData);
-
-    //     // Send a POST request with the JSON data
-    //     const data = await axios.post("URL", formData, {
-    //         headers: {
-    //             "Content-Type": 'application/json',
-    //         }
-    //     })
-    // }
-
     const submitForm = async (e) => {
-        e.preventDefault();
-        let newFormData = {};
-        const title = titleRef.current.value;
-        const content = contentRef.current.value;
-        //console.log(content.trim().length)
-        const category = categoryRef.current.value;
-        const priority = notePriority;
+        try {
+            e.preventDefault();
+            let newFormData = {};
+            const title = titleRef.current.value;
+            const content = contentRef.current.value;
+            const category = categoryRef.current.value;
+            const priority = notePriority;
 
-        const isTitleValid = await validateField('title', title, 3, 'Title', setErrorDataField);
-        const isContentValid = await validateField('content', content, 5, 'Content', setErrorDataField)
-        const isCategoryValid = await validateField('category', category, 1, 'Category', setErrorDataField)
-  
+            const isTitleValid = await validateField('title', title, 3, 'Title', setErrorDataField);
+            const isContentValid = await validateField('content', content, 5, 'Content', setErrorDataField)
+            const isCategoryValid = await validateField('category', category, 1, 'Category', setErrorDataField)
 
-        if (isTitleValid && isContentValid && isCategoryValid) {
-            newFormData.title = title.trim();
-            newFormData.content = content.trim();
-            newFormData.category = category.trim();
-            if (priority) {
-                newFormData.priority = priority;
+
+            if (isTitleValid && isContentValid && isCategoryValid) {
+                newFormData.title = title.trim();
+                newFormData.content = content.trim();
+                newFormData.category = category.trim();
+                if (priority) {
+                    newFormData.priority = priority;
+                }
+                const responseData = await createUserNote(newFormData)
+                console.log(responseData)
+                onClose();
             }
-            const responseData = await createUserNote(newFormData)
-            console.log(responseData)
+        } catch (error) {
+            console.log(error)
         }
     }
 
