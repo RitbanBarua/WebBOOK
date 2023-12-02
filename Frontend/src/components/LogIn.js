@@ -51,12 +51,12 @@ export default function LogIn(props) {
 
         else if (success !== undefined && success === false) {
           if (message) {
-            setErrorDataField('username', message);
             setErrorDataField('email', message);
+            setErrorDataField('password', message);
           } else if (errors) {
             const errorMessage = errors[0].msg;
-            setErrorDataField('username', errorMessage);
             setErrorDataField('email', errorMessage);
+            setErrorDataField('password', errorMessage);
           }
         }
       }

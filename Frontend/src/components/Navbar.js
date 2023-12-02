@@ -1,35 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import logo from '../assests/logo.png'
+import defaultUserImg from '../assests/default-profile.webp'
+import { Link } from 'react-router-dom';
 
 const toggleDropdown = () => {
     const dropdownContainer = document.getElementById('user-dropdown-container');
-    dropdownContainer.classList.toggle('show-dropdown');
+    dropdownContainer.classList.toggle('active');
 }
 
 export default function Navbar() {
-    const [loggedIn, setLoggedIn] = useState(false);
-
-    useEffect(() => {
-        if (localStorage.getItem("token")) {
-            setLoggedIn(true)
-        } else {
-            setLoggedIn(false)
-        }
-    }, [])
-
-    /*useEffect(() => {  // Make it work later HTML Collection
-        if (loggedIn) {
-            document.getElementsByClassName('default-disabled').forEach(element => {
-                element.style.display = 'block';
-            });
-        } else {
-            document.getElementsByClassName('default-disabled').forEach(element => {
-                element.style.display = 'none';
-            });
-        }
-    }, [loggedIn])*/
-console.log(Array.from(document.getElementsByClassName('default-disabled')))
-
     return (
         <nav>
             <img className='logo' src={logo} alt="logo" draggable="false" />
@@ -43,17 +22,47 @@ console.log(Array.from(document.getElementsByClassName('default-disabled')))
                 <i className="fa-regular fa-pen-to-square fa-xl" style={{ color: '#000000' }} />
                 <div className="dropdown-enabled-container" id='nav-dropdown-btn' onClick={toggleDropdown}>
                     <div className="user-container">
-                        <div className="img-container"><i className="fa-regular fa-user fa-xl" style={{ color: '#000000' }} /></div>
+                        <div className="img-container">
+                            <img className='user-img' src={defaultUserImg} alt="user-img" />
+                        </div>
                     </div>
                     <i className="fa-solid fa-caret-down" style={{ color: '#000000' }} />
-                    <ul className="dropdown-container" id='user-dropdown-container'>
-                        <li className='default-disabled'><a href="/"><span className='nav-list-item'>Profile</span></a></li>
-                        <li className='default-disabled'><a href="/"><span className='nav-list-item'>Stared Notes</span></a></li>
-                        <li className='default-disabled'><a href="/"><span className='nav-list-item'>Settings</span></a></li>
-                        <li className='default-disabled'><a href="/"><span className='nav-list-item'>Logout</span></a></li>
-                        <li><a href="/"><span className='nav-list-item'>SignUp</span></a></li>
-                        <li><a href="/"><span className='nav-list-item'>Login</span></a></li>
-                    </ul>
+                    <div className="dropdown-container" id='user-dropdown-container'>
+                        <h3 className='profile-name'>Ritban Barua Harsh</h3>
+                        <p className='profile-email'>ritban@gmail.com</p>
+                        <ul className="dropdown-menu" id='user-dropdown-menu'>
+                            <li>
+                                <Link href="/">
+                                    <i class="far fa-user-circle"></i>
+                                    <span className='nav-list-item'>Profile</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/">
+                                    <i class="far fa-star"></i>
+                                    <span className='nav-list-item'>Stared Notes</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/">
+                                    <i class="fas fa-user-cog"></i>
+                                    <span className='nav-list-item'>Settings</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/">
+                                    <i class="far fa-question-circle"></i>
+                                    <span className='nav-list-item'>Help</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/">
+                                    <i class="fas fa-arrow-right-from-bracket"></i>
+                                    <span className='nav-list-item'>Logout</span>
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </nav>

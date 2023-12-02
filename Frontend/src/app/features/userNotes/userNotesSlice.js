@@ -18,7 +18,7 @@ export const userNotesSlice = createSlice({
                 state.userNotes[noteIndex] = action.payload;
             }
         },
-        deleteUserNote: (state, action) => {
+        removeUserNote: (state, action) => {
             state.userNotes = state.userNotes.filter(
                 (note) => note._id !== action.payload
             );
@@ -30,5 +30,5 @@ export const userNotesSlice = createSlice({
 })
 
 
-export const { setUserNotes, addUserNote, updateUserNote, deleteUserNote, resetUserNotes } = userNotesSlice.actions;
+export const { setUserNotes, addUserNote, updateUserNote, removeUserNote, resetUserNotes } = userNotesSlice.actions;
 export default userNotesSlice.reducer;

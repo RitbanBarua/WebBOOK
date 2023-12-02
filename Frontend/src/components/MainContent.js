@@ -6,7 +6,7 @@ import axios from 'axios'
 import Navbar from './Navbar';
 
 export default function MainContent(props) {
-    const { getUserNotes, onCreateOpen, onEditOpen } = props;
+    const { getUserNotes, deleteUserNote, onCreateOpen, onEditOpen } = props;
 
     const cryptoKey = process.env.REACT_APP_SECRET_CRYPTO_KEY;
 
@@ -32,10 +32,17 @@ export default function MainContent(props) {
             console.log('Error in Fetching Quotes', error);
         }
     }
+    const test = async () => {
+        
+    }
 
     useEffect(() => {
-        fetchDailyQuote();
-        getUserNotes();
+        try {
+fetchDailyQuote();
+getUserNotes();
+        } catch (error) {
+            console.log(error)
+        }
     }, [])
 
 
@@ -63,23 +70,23 @@ export default function MainContent(props) {
                 </div>
             </header>
             <main>
-                <div id="notes-container">
-                    {(userNotes && userNotes.length !== 0) ? 
-                     userNotes.map(note => {
-                        return(
-                            <Note title={note.title} content={note.content} category={note.category} priority={note.priority} onEditOpen={onEditOpen} />
-                        )
-                     })
-                     : undefined}
-                    <div className="note-container add-note-container">
+                    <div id="notes-container">
+                        {(userNotes && userNotes.length !== 0) ?
+                            userNotes.map(note => {
+                                return (
+                                    <Note key={note._id} id={note._id} title={note.title} content={note.content} category={note.category} priority={note.priority} deleteFnc={deleteUserNote} onEditOpen={onEditOpen} />
+                                )
+                            })
+                            : undefined}
+                        <div className="note-container add-note-container">
 
-                        <button onClick={onCreateOpen}>
-                            <i className="fa-solid fa-plus fa-2xl" style={{ color: '#b0b0b0' }} />
-                        </button>
-                        <p>Create Note</p>
+                            <button onClick={onCreateOpen}>
+                                <i className="fa-solid fa-plus fa-2xl" style={{ color: '#b0b0b0' }} />
+                            </button>
+                            <p>Create Note</p>
 
+                        </div>
                     </div>
-                </div>
             </main>
         </>
     )

@@ -17,7 +17,11 @@ import Register from './components/Register';
 import LogIn from './components/LogIn';
 import axios from 'axios';
 import { login, logout } from './app/features/loggedInStatus/loggedInStatusSlice';
-import { addUserNote, setUserNotes } from './app/features/userNotes/userNotesSlice';
+import { addUserNote, setUserNotes, removeUserNote } from './app/features/userNotes/userNotesSlice';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Cookie from './components/Cookie';
+//import LoadingPage1 from './components/LoadingPage1';
 
 
 function App() {
@@ -29,10 +33,12 @@ function App() {
   const loginURL = process.env.REACT_APP_LOGIN_URL;
   const getUserNotesURL = process.env.REACT_APP_GET_NOTES_URL;
   const createNoteURL = process.env.REACT_APP_CREATE_NOTE_URL;
+  const updateNoteURL = process.env.REACT_APP_UPDATE_NOTE_URL;
+  const deleteNoteURL = process.env.REACT_APP_DELETE_NOTE_URL;
 
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(state => state.loggedInStatus.isLoggedIn);
-  // console.log(loggedInStatus)
+  //const isLoading = useSelector(state => state.loadingStatus.isLoading);
 
   const openCreateNoteModal = () => {
     setCreateNoteModalOpen(true);
@@ -143,18 +149,22 @@ function App() {
 
         // Dispatching encrypted user data
         dispatch(login(encryptedUserData))
-
+        toast.success("Registration Successful!");
         return responseData;
       }
     } catch (error) {
       console.log(error.message)
-
-      const statusCode = error.response.status;
-      const responseData = error.response.data;
-      if (statusCode === 400 && responseData.success === false) {
-
-        // If the user was not created successfully, display an error message
-        return responseData;
+      if (error.response) {
+        const statusCode = error.response.status;
+        const responseData = error.response.data;
+        if (statusCode === 400 && responseData.success === false) {
+          toast.error("Registration Failed!");
+          return responseData;
+        } else {
+          toast.error("Internal Server Error!");
+        }
+      } else {
+        toast.error("Network Error!");
       }
     }
   }
@@ -184,18 +194,23 @@ function App() {
 
         // Dispatching encrypted user data
         dispatch(login(encryptedUserData))
+        toast.success("Logged In Successfully!");
 
         return responseData;
       }
     } catch (error) {
       console.log(error.message)
-
-      const statusCode = error.response.status;
-      const responseData = error.response.data;
-      if ((statusCode === 400 || statusCode === 401) && responseData.success === false) {
-
-        // If the user was not created successfully, display an error message
-        return responseData;
+      if (error.response) {
+        const statusCode = error.response.status;
+        const responseData = error.response.data;
+        if ((statusCode === 400 || statusCode === 401) && responseData.success === false) {
+          toast.error("Login Failed!");
+          return responseData;
+        } else {
+          toast.error("Internal Server Error!");
+        }
+      } else {
+        toast.error("Network Error!");
       }
     }
   }
@@ -224,6 +239,18 @@ function App() {
       }
     } catch (error) {
       console.log(error.message)
+      if (error.response) {
+        const statusCode = error.response.status;
+        const responseData = error.response.data;
+        if (statusCode === 404 && responseData.success === false) {
+          console.log("User Notes Not Found!");
+          return responseData;
+        } else {
+          toast.error("Internal Server Error!");
+        }
+      } else {
+        toast.error("Network Error!");
+      }
     }
   }
 
@@ -244,11 +271,62 @@ function App() {
       // If the new note created successfully
       if (response.status === 201 && responseData.success === true) {
         const newNote = responseData.newNote;
-        dispatch(addUserNote(newNote))
+        dispatch(addUserNote(newNote));
+        toast.success("New Note Created Sccessfully!");
         return responseData;
       }
     } catch (error) {
       console.log(error.message)
+      if (error.response) {
+        const statusCode = error.response.status;
+        const responseData = error.response.data;
+        if (statusCode === 400 && responseData.success === false) {
+          console.log("Failed To Create New Note!");
+          return responseData;
+        } else {
+          toast.error("Internal Server Error!");
+        }
+      } else {
+        toast.error("Network Error!");
+      }
+    }
+  }
+
+  const deleteUserNote = async (noteId) => {
+    try {
+      const response = await axios.delete(deleteNoteURL + noteId, {
+        headers: {
+          "Content-Type": 'application/json',
+        },
+        withCredentials: true,
+      });
+      const responseData = response.data;
+
+      // If the note deleted successfully
+      if (response.status === 200 && responseData.success === true) {
+        dispatch(removeUserNote(noteId));
+        toast.success("Note Deleted Successfully!");
+      }
+
+      return responseData;
+
+    } catch (error) {
+      console.log(error.message)
+      if (error.response) {
+        const statusCode = error.response.status;
+        const responseData = error.response.data;
+        if (statusCode === 404 && responseData.success === false) {
+          toast.warning("Note Not Found!");
+          return responseData;
+        } else if (statusCode === 400 && responseData.success === false) {
+          toast.error("Client Side Error!")
+          return responseData;
+        } else {
+          toast.error("Internal Server Error!");
+        }
+      } else {
+        toast.error('Network Error!');
+      }
     }
   }
 
@@ -257,12 +335,14 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={isLoggedIn ? <MainContent getUserNotes={getUserNotes} onCreateOpen={openCreateNoteModal} onEditOpen={openEditNoteModal} /> : <Navigate to={"/register"} />} />
+          <Route path="/" element={isLoggedIn ? <MainContent getUserNotes={getUserNotes} deleteUserNote={deleteUserNote} onCreateOpen={openCreateNoteModal} onEditOpen={openEditNoteModal} /> : <Navigate to={"/register"} />} />
           <Route path='/register' element={isLoggedIn ? <Navigate to={"/"} /> : <Register validateField={validateField} validatePassword={validatePassword} registerUser={registerUser} />} />
           <Route path="/login" element={isLoggedIn ? <Navigate to={"/"} /> : <LogIn validateField={validateField} validatePassword={validatePassword} loginUser={loginUser} />} />
         </Routes>
         {isCreateNoteModalOpen && <CreateNote validateField={validateField} createUserNote={createUserNote} onClose={closeCreateNoteModal} />}
         {isEditNoteModalOpen && <EditNote onClose={closeEditNoteModal} />}
+        <ToastContainer />
+        <Cookie />
       </BrowserRouter>
     </>
   );
