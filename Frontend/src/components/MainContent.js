@@ -4,6 +4,7 @@ import CryptoJS from 'crypto-js';
 import Note from './Note'
 import axios from 'axios'
 import Navbar from './Navbar';
+import Clock from './Clock';
 
 export default function MainContent(props) {
     const { getUserNotes, deleteUserNote, onCreateOpen, onEditOpen } = props;
@@ -33,13 +34,13 @@ export default function MainContent(props) {
         }
     }
     const test = async () => {
-        
+
     }
 
     useEffect(() => {
         try {
-fetchDailyQuote();
-getUserNotes();
+            fetchDailyQuote();
+            getUserNotes();
         } catch (error) {
             console.log(error)
         }
@@ -65,28 +66,28 @@ getUserNotes();
                         </div>
                     </div>
                     <div id="header-right">
-                        right
+                        <Clock />
                     </div>
                 </div>
             </header>
             <main>
-                    <div id="notes-container">
-                        {(userNotes && userNotes.length !== 0) ?
-                            userNotes.map(note => {
-                                return (
-                                    <Note key={note._id} id={note._id} title={note.title} content={note.content} category={note.category} priority={note.priority} deleteFnc={deleteUserNote} onEditOpen={onEditOpen} />
-                                )
-                            })
-                            : undefined}
-                        <div className="note-container add-note-container">
+                <div id="notes-container">
+                    {(userNotes && userNotes.length !== 0) ?
+                        userNotes.map(note => {
+                            return (
+                                <Note key={note._id} id={note._id} title={note.title} content={note.content} category={note.category} priority={note.priority} deleteFnc={deleteUserNote} onEditOpen={onEditOpen} />
+                            )
+                        })
+                        : undefined}
+                    <div className="note-container add-note-container">
 
-                            <button onClick={onCreateOpen}>
-                                <i className="fa-solid fa-plus fa-2xl" style={{ color: '#b0b0b0' }} />
-                            </button>
-                            <p>Create Note</p>
+                        <button onClick={onCreateOpen}>
+                            <i className="fa-solid fa-plus fa-2xl" style={{ color: '#b0b0b0' }} />
+                        </button>
+                        <p>Create Note</p>
 
-                        </div>
                     </div>
+                </div>
             </main>
         </>
     )

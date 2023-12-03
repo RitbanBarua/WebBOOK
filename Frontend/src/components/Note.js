@@ -33,7 +33,7 @@ export default function Note(props) {
     } catch (error) {
       console.log(error)
     }
-  };console.log(id)
+  };
 
   return (
     <div className="note-container">
@@ -45,7 +45,7 @@ export default function Note(props) {
         </div>
         <div className="right">
           <button className="img-wrapper" title='Edit' data-title={title} onClick={editNote}><i className="fa-solid fa-pen" style={{ color: '#000000' }} /></button>
-          <button className="img-wrapper" title='Delete' onClick={()=>{delNote(id)}}><i className="fa-regular fa-trash-can fa-lg" style={{ color: '#000000' }} /></button>
+          <button className="img-wrapper" title='Delete' onClick={() => { delNote(id) }}><i className="fa-regular fa-trash-can fa-lg" style={{ color: '#000000' }} /></button>
           <button className="img-wrapper" id='star-btn' title='Star'><i className="fa-regular fa-star" style={{ color: '#000000' }} /></button>
         </div>
       </div>

@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react'
 import penImg from '../assests/pen.webp'
+import DottedLoader from './DottedLoader';
 
 export default function CreateNote(props) {
     const { validateField, createUserNote, onClose } = props;
     const [shouldCloseModal, setShouldCloseModal] = useState(false);
     const [notePriority, setNotePriority] = useState(undefined);
-    const [formError, setFormError] = useState({})
+    const [formError, setFormError] = useState({});
+    const [showLoader, setShowLoader] = useState(false);
 
     const titleRef = useRef(undefined);
     const contentRef = useRef(undefined);
@@ -25,6 +27,8 @@ export default function CreateNote(props) {
     const submitForm = async (e) => {
         try {
             e.preventDefault();
+            setShowLoader(true);
+
             let newFormData = {};
             const title = titleRef.current.value;
             const content = contentRef.current.value;
@@ -49,6 +53,8 @@ export default function CreateNote(props) {
             }
         } catch (error) {
             console.log(error)
+        } finally {
+            setShowLoader(false);
         }
     }
 
@@ -109,7 +115,9 @@ export default function CreateNote(props) {
                     </div>
                     <div className='btn-container'>
                         <button type="reset" onClick={onClose}>Cancel</button>
-                        <button type='submit'>Submit</button>
+                        <button type='submit'>
+                            {showLoader ? <DottedLoader /> : "Submit"}
+                        </button>
                     </div>
                 </form>
             </div>

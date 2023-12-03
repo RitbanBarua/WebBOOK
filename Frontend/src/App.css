@@ -21,6 +21,7 @@
     --disabled-input-bg-col: rgba(220, 220, 220, 1);
     --error-text-col: #e74c3c;
     --text-grey-col: #63727e;
+    --clock-width: 465px;
 }
 
 body {
@@ -43,6 +44,7 @@ nav {
     background-color: var(--primary-bg-col);
     border-bottom: 1px dotted gray;
     box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
+    z-index: 10;
 }
 
 .logo {
@@ -74,6 +76,8 @@ nav {
     padding: 10px;
     border: none;
     outline: none;
+    height: 36px;
+    background-color: rgb(239, 239, 239);
 }
 
 #nav-right-container {
@@ -81,7 +85,7 @@ nav {
     justify-content: space-between;
     align-items: center;
     min-width: 100px;
-    margin-right: 50px;
+    margin-right: 25px;
 }
 
 .dropdown-enabled-container {
@@ -197,6 +201,12 @@ nav {
     color: #4834d4
 }
 
+@media only screen and (max-width: 700px) {
+    .search-form{
+        display: none;
+    }
+}
+
 /* Main Content CSS */
 .header-container {
     height: 150px;
@@ -263,6 +273,28 @@ nav {
     font-style: oblique;
 }
 
+#header-right {
+    position: relative;
+    width: var(--clock-width);
+    min-width: var(--clock-width);
+    padding: 0px;
+    overflow: hidden;                               /* Check Clock.js CSS */
+}
+
+main {
+    height: calc(100vh - 70px);
+}
+
+#notes-container {
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    overflow-x: hidden;
+    background-color: var(--secondary-bg-col);
+}
+
 .add-note-container {
     display: flex;
     flex-direction: column;
@@ -279,20 +311,27 @@ nav {
     cursor: pointer;
 }
 
-/* Note CSS */
-#notes-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    /* height: calc(100vh - 267px); */
-    /* ToDo */
-    overflow-x: hidden;
-    /* height: 100%; */
-    /*padding: 5px;*/
-    background-color: var(--secondary-bg-col);
+@media only screen and (max-width: 1430px) {
+    #header-mid {
+        width: 90%;
+    }
+
+    #header-right {
+        display: none;
+    }
 }
 
+@media only screen and (max-width: 600px) {
+    #header-left {
+        width: 90%;
+    }
+
+    #header-mid {
+        display: none;
+    }
+}
+
+/* Note CSS */
 .note-container {
     margin: 5px;
     padding: 10px;
@@ -704,6 +743,77 @@ label {
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .iti__flag {background-image: url("path/to/flags@2x.png");}
 } */
+
+/* Clock CSS */
+#canvas {
+    position: absolute;
+    width: 465px;
+    height: 100%;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-image: url(http://www.chabudai.org/temp/wonderfl/honehone/img/tenten.gif);
+    background-position-y: 127%;
+}
+
+#hour1 {
+    position: absolute;
+    width: 80px;
+    height: 100px;
+    top: 0px;
+    left: 40px;
+    background-repeat: no-repeat;
+    background-image: url(http://www.chabudai.org/temp/wonderfl/honehone/img/honehone1.gif);
+}
+
+#hour2 {
+    position: absolute;
+    width: 80px;
+    height: 100px;
+    top: 0px;
+    left: 80px;
+    background-repeat: no-repeat;
+    background-image: url(http://www.chabudai.org/temp/wonderfl/honehone/img/honehone1.gif);
+}
+
+#minute1 {
+    position: absolute;
+    width: 80px;
+    height: 100px;
+    top: 0px;
+    left: 170px;
+    background-repeat: no-repeat;
+    background-image: url(http://www.chabudai.org/temp/wonderfl/honehone/img/honehone1.gif);
+}
+
+#minute2 {
+    position: absolute;
+    width: 80px;
+    height: 100px;
+    top: 0px;
+    left: 210px;
+    background-repeat: no-repeat;
+    background-image: url(http://www.chabudai.org/temp/wonderfl/honehone/img/honehone1.gif);
+}
+
+#second1 {
+    position: absolute;
+    width: 80px;
+    height: 100px;
+    top: 0px;
+    left: 300px;
+    background-repeat: no-repeat;
+    background-image: url(http://www.chabudai.org/temp/wonderfl/honehone/img/honehone1.gif);
+}
+
+#second2 {
+    position: absolute;
+    width: 80px;
+    height: 100px;
+    top: 0px;
+    left: 340px;
+    background-repeat: no-repeat;
+    background-image: url(http://www.chabudai.org/temp/wonderfl/honehone/img/honehone1.gif);
+}
 
 
 /*======================

@@ -17,10 +17,11 @@ import Register from './components/Register';
 import LogIn from './components/LogIn';
 import axios from 'axios';
 import { login, logout } from './app/features/loggedInStatus/loggedInStatusSlice';
-import { addUserNote, setUserNotes, removeUserNote } from './app/features/userNotes/userNotesSlice';
+import { setUserNotes, addUserNote, updateUserNote, removeUserNote } from './app/features/userNotes/userNotesSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookie from './components/Cookie';
+import Cookies from 'js-cookie';
 //import LoadingPage1 from './components/LoadingPage1';
 
 
@@ -38,6 +39,7 @@ function App() {
 
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(state => state.loggedInStatus.isLoggedIn);
+  const isLoggedInCookie = Cookies.get('isLoggedIn');
   //const isLoading = useSelector(state => state.loadingStatus.isLoading);
 
   const openCreateNoteModal = () => {
@@ -121,17 +123,15 @@ function App() {
 
   const registerUser = async (newUserData) => {
     try {
-      // Convert the user data object to a JSON string
       const userData = JSON.stringify(newUserData);
 
-      // Create a new user
       const response = await axios.post(registerURL, userData, {
         headers: {
           'Content-Type': 'application/json'
         },
         withCredentials: true,
       })
-      // console.log(response)
+
       const responseData = response.data;
 
       // If the user was created successfully, redirect to the login page
@@ -147,7 +147,6 @@ function App() {
         // Encrypting User Data
         const encryptedUserData = CryptoJS.AES.encrypt(userData, cryptoKey).toString();
 
-        // Dispatching encrypted user data
         dispatch(login(encryptedUserData))
         toast.success("Registration Successful!");
         return responseData;
@@ -172,17 +171,15 @@ function App() {
 
   const loginUser = async (existingUserData) => {
     try {
-      // Convert the user data object to a JSON string
       const userData = JSON.stringify(existingUserData);
 
-      // Create a new user
       const response = await axios.post(loginURL, userData, {
         headers: {
           'Content-Type': 'application/json'
         },
         withCredentials: true,
       })
-      // console.log(response)
+
       const responseData = response.data;
 
       // If the user was created successfully, redirect to the login page
@@ -192,7 +189,6 @@ function App() {
         // Encrypting User Data
         const encryptedUserData = CryptoJS.AES.encrypt(userData, cryptoKey).toString();
 
-        // Dispatching encrypted user data
         dispatch(login(encryptedUserData))
         toast.success("Logged In Successfully!");
 
@@ -223,19 +219,23 @@ function App() {
 
   const getUserNotes = async () => {
     try {
-      const response = await axios.get(getUserNotesURL, {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        withCredentials: true,
-      })
-      const responseData = response.data;
+      if (isLoggedInCookie) {
+        const response = await axios.get(getUserNotesURL, {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true,
+        })
+        const responseData = response.data;
 
-      // If user notes found
-      if (response.status === 200 && responseData.success === true) {
-        const userNotes = responseData.notes;
-        dispatch(setUserNotes(userNotes));
-        return userNotes;
+        // If user notes found
+        if (response.status === 200 && responseData.success === true) {
+          const userNotes = responseData.notes;
+          dispatch(setUserNotes(userNotes));
+          return userNotes;
+        } else {
+          toast.error("Session Expired, Please Login Again!");
+        }
       }
     } catch (error) {
       console.log(error.message)
@@ -256,24 +256,27 @@ function App() {
 
   const createUserNote = async (formData) => {
     try {
-      // Convert the form data object to a JSON string
-      const formDataJSON = JSON.stringify(formData);
+      if (isLoggedInCookie) {
+        const formDataJSON = JSON.stringify(formData);
 
-      // Send a POST request with the JSON data
-      const response = await axios.post(createNoteURL, formDataJSON, {
-        headers: {
-          "Content-Type": 'application/json',
-        },
-        withCredentials: true,
-      })
-      const responseData = response.data;
+        // Send a POST request with the JSON data
+        const response = await axios.post(createNoteURL, formDataJSON, {
+          headers: {
+            "Content-Type": 'application/json',
+          },
+          withCredentials: true,
+        })
+        const responseData = response.data;
 
-      // If the new note created successfully
-      if (response.status === 201 && responseData.success === true) {
-        const newNote = responseData.newNote;
-        dispatch(addUserNote(newNote));
-        toast.success("New Note Created Sccessfully!");
-        return responseData;
+        // If the new note created successfully
+        if (response.status === 201 && responseData.success === true) {
+          const newNote = responseData.newNote;
+          dispatch(addUserNote(newNote));
+          toast.success("New Note Created Sccessfully!");
+          return responseData;
+        } else {
+          toast.error("Session Expired, Please Login Again!");
+        }
       }
     } catch (error) {
       console.log(error.message)
@@ -292,24 +295,74 @@ function App() {
     }
   }
 
+  const updateNote = async (formData, noteId) => {
+    try {
+      if (isLoggedInCookie) {
+        const formDataJSON = JSON.stringify(formData);
+
+        // Send a PATCH request with the JSON data
+        const response = await axios.patch(updateNoteURL + noteId, formDataJSON, {
+          headers: {
+            "Content-Type": 'application/json',
+          },
+          withCredentials: true,
+        });
+        const responseData = response.data;
+
+        // If the updated note was successful
+        if (response.status === 200 && responseData.success === true) {
+          const updatedNote = responseData.updatedNote;
+          dispatch(updateUserNote(updatedNote));
+          toast.success('Note Updated Successfully!');
+          return responseData;
+        }
+      } else {
+        toast.error('Session Expired, Please Login Again!');
+      }
+    } catch (error) {
+      console.log(error.message);
+      if (error.response) {
+        const statusCode = error.response.status;
+        const responseData = error.response.data;
+        if (statusCode === 404 && responseData.success === false) {
+          console.log("Note Not Found!");
+          return responseData;
+        } else if (statusCode === 400 && responseData.success === false) {
+          toast.error("Client Side Error!")
+          return responseData;
+        } else {
+          toast.error("Internal Server Error!");
+        }
+      } else {
+        toast.error("Network Error!");
+      }
+    }
+  }
+
   const deleteUserNote = async (noteId) => {
     try {
-      const response = await axios.delete(deleteNoteURL + noteId, {
-        headers: {
-          "Content-Type": 'application/json',
-        },
-        withCredentials: true,
-      });
-      const responseData = response.data;
+      if (isLoggedInCookie) {
+        const response = await axios.delete(deleteNoteURL + noteId, {
+          headers: {
+            "Content-Type": 'application/json',
+          },
+          withCredentials: true,
+        });
+        const responseData = response.data;
 
-      // If the note deleted successfully
-      if (response.status === 200 && responseData.success === true) {
-        dispatch(removeUserNote(noteId));
-        toast.success("Note Deleted Successfully!");
+        // If the note deleted successfully
+        if (response.status === 200 && responseData.success === true) {
+          dispatch(removeUserNote(noteId));
+          toast.success("Note Deleted Successfully!");
+          return responseData;
+        }
+      } else {
+        toast.error("Session Expired, Please Login Again!");
+        // setTimeout(() => {
+        //   //window.location.href = window.location.origin + "/login";
+        //   window.location.reload();
+        // }, 3000);
       }
-
-      return responseData;
-
     } catch (error) {
       console.log(error.message)
       if (error.response) {
@@ -340,7 +393,7 @@ function App() {
           <Route path="/login" element={isLoggedIn ? <Navigate to={"/"} /> : <LogIn validateField={validateField} validatePassword={validatePassword} loginUser={loginUser} />} />
         </Routes>
         {isCreateNoteModalOpen && <CreateNote validateField={validateField} createUserNote={createUserNote} onClose={closeCreateNoteModal} />}
-        {isEditNoteModalOpen && <EditNote onClose={closeEditNoteModal} />}
+        {isEditNoteModalOpen && <EditNote validateField={validateField} onClose={closeEditNoteModal} />}
         <ToastContainer />
         <Cookie />
       </BrowserRouter>

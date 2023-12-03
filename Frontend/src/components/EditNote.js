@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
-// import NoteForm from './NoteForm'
-import penImg from '../assests/pen.webp'
 import { useSelector } from 'react-redux';
+import penImg from '../assests/pen.webp'
+import DottedLoader from './DottedLoader';
 
 export default function EditNote(props) {
-    const { onClose } = props;
+    const { validateField, onClose } = props;
+
     const [shouldCloseModal, setShouldCloseModal] = useState(false);
-    // const [editableData, setEditableData] = useState({})
     const [formError, setFormError] = useState({})
+    const [showLoader, setShowLoader] = useState(false);
 
 
     const data = useSelector(state => state.editableNoteData.editableData)
@@ -31,31 +32,39 @@ export default function EditNote(props) {
         setNoteDataField('priority', value)
     };
 
-    const submitForm = (e) => {
-        e.preventDefault();
-        let formData = {};
-        if (noteData.title && noteData.title.trim() !== "") {
-            if (noteData.title.trim().length < 3) {
-                setErrorDataField('title', "Title should be at least 3 characters long");
-            } else {
-                formData.title = noteData.title.trim()
-                setErrorDataField('title', undefined);
-            }
-        }
-        if (noteData.content && noteData.content.trim() !== "") {
-            if (noteData.content.trim().length < 5) {
-                setErrorDataField('content', "Content should be at least 5 characters long")
-            } else {
-                formData.content = noteData.content.trim()
-                setErrorDataField('content', undefined);
-            }
-        }
-        if (noteData.category && noteData.category.trim() !== "") { formData.category = noteData.category.trim() }
-        if (noteData.priority && noteData.priority.trim() !== "") { formData.priority = noteData.priority.trim() }
+    const submitForm = async (e) => {
+        try {
+            e.preventDefault();
+            setShowLoader(true);
 
-        // Convert the form data object to a JSON string
-        const formDataJSON = JSON.stringify(formData);
-        console.log(formDataJSON)
+            let formData = {};
+            const title = noteData.title;
+            const content = noteData.content;
+            const category = noteData.category;
+            const priority = noteData.priority;
+
+            const isTitleValid = await validateField('title', title, 3, 'Title', setErrorDataField);
+            const isContentValid = await validateField('content', content, 5, 'Content', setErrorDataField);
+            const isCategoryValid = await validateField('category', category, 1, 'Category', setErrorDataField);
+
+            if (isTitleValid && isContentValid && isCategoryValid) {
+                formData.title = title.trim();
+                formData.content = content.trim();
+                formData.category = category.trim();
+                if (priority) {
+                    formData.priority = priority;
+                }
+
+                // Convert the form data object to a JSON string
+                const formDataJSON = JSON.stringify(formData);
+                console.log(formDataJSON)
+                onClose();
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setShowLoader(false);
+        }
     };
 
     useEffect(() => {
@@ -93,13 +102,13 @@ export default function EditNote(props) {
                 </header>
                 <form className='note-form' id='edit-note-form' onSubmit={submitForm}>
                     <label htmlFor="note-title">Title</label>
-                    <input id='note-title' type='text' name='title' value={noteData.title} placeholder='Enter Note Title' onChange={(e) => setNoteDataField('title', e.target.value)} />
+                    <input id='note-title' type='text' name='title' value={noteData.title} placeholder='Enter Note Title' onChange={(e) => setNoteDataField('title', e.target.value)} required />
                     <p className="error-text">{formError.title}</p>
                     <label htmlFor="note-content">Content</label>
-                    <textarea id='note-content' name='content' rows='5' cols='30' value={noteData.content} placeholder='Enter Note Content' onChange={(e) => setNoteDataField('content', e.target.value)}></textarea>
+                    <textarea id='note-content' name='content' rows='5' cols='30' value={noteData.content} placeholder='Enter Note Content' onChange={(e) => setNoteDataField('content', e.target.value)} required ></textarea>
                     <p className="error-text">{formError.content}</p>
                     <label htmlFor="note-category">Category</label>
-                    <input id='note-category' type="text" name='category' value={noteData.category} placeholder='Enter Note Category' onChange={(e) => setNoteDataField('category', e.target.value)} />
+                    <input id='note-category' type="text" name='category' value={noteData.category} placeholder='Enter Note Category' onChange={(e) => setNoteDataField('category', e.target.value)} required />
                     <p className="error-text"></p>
                     <label htmlFor="note-priority">Priority</label>
                     {/* <select name="priority" id="note-priority" value={noteData.priority} onChange={(e) => setNoteDataField('priority', e.target.value)}>
@@ -132,7 +141,9 @@ export default function EditNote(props) {
                     </div>
                     <div className='btn-container'>
                         <button type="reset" onClick={onClose}>Cancel</button>
-                        <button type='submit'>Update</button>
+                        <button type='submit'>
+                            {showLoader ? <DottedLoader /> : "Update"}
+                        </button>
                     </div>
                 </form>
             </div>

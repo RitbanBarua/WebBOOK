@@ -11,7 +11,7 @@ const toggleDropdown = () => {
 export default function Navbar() {
     return (
         <nav>
-            <img className='logo' src={logo} alt="logo" draggable="false" />
+            <img className='logo' src={logo} alt="logo" draggable="false" />         {/* 330px - W logo */}
             <div className="search-container">
                 <form className="search-form">
                     <input type="search" placeholder='Search' />
@@ -19,7 +19,7 @@ export default function Navbar() {
                 </form>
             </div>
             <div id="nav-right-container">
-                <i className="fa-regular fa-pen-to-square fa-xl" style={{ color: '#000000' }} />
+                <i className="fa-regular fa-pen-to-square fa-2xl" style={{ color: '#000000' }} />
                 <div className="dropdown-enabled-container" id='nav-dropdown-btn' onClick={toggleDropdown}>
                     <div className="user-container">
                         <div className="img-container">
@@ -33,31 +33,31 @@ export default function Navbar() {
                         <ul className="dropdown-menu" id='user-dropdown-menu'>
                             <li>
                                 <Link href="/">
-                                    <i class="far fa-user-circle"></i>
+                                    <i className="far fa-user-circle"></i>
                                     <span className='nav-list-item'>Profile</span>
                                 </Link>
                             </li>
                             <li>
                                 <Link href="/">
-                                    <i class="far fa-star"></i>
+                                    <i className="far fa-star"></i>
                                     <span className='nav-list-item'>Stared Notes</span>
                                 </Link>
                             </li>
                             <li>
                                 <Link href="/">
-                                    <i class="fas fa-user-cog"></i>
+                                    <i className="fas fa-user-cog"></i>
                                     <span className='nav-list-item'>Settings</span>
                                 </Link>
                             </li>
                             <li>
                                 <Link href="/">
-                                    <i class="far fa-question-circle"></i>
+                                    <i className="far fa-question-circle"></i>
                                     <span className='nav-list-item'>Help</span>
                                 </Link>
                             </li>
                             <li>
                                 <Link href="/">
-                                    <i class="fas fa-arrow-right-from-bracket"></i>
+                                    <i className="fas fa-arrow-right-from-bracket"></i>
                                     <span className='nav-list-item'>Logout</span>
                                 </Link>
                             </li>
