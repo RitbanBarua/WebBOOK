@@ -12,7 +12,7 @@ export default function Note(props) {
     console.log("edit opened")
     dispatch(setEditableData(
       {
-        // id: props._id,
+        id: id,
         title: title,
         content: content,
         category: category,
@@ -40,8 +40,8 @@ export default function Note(props) {
       <div className="img-wrapper"><img src={abstruct1} alt="ab" /></div>
       <div className="container">
         <div className="left">
-          <h2>{title}</h2>  {/* 25 chars */}
-          <p>{content}</p>  {/* 150 chars */}
+          <h2 className='note-title'>{title}</h2>  {/* 25 chars */}
+          <p className='note-content'>{content}</p>  {/* 150 chars */}
         </div>
         <div className="right">
           <button className="img-wrapper" title='Edit' data-title={title} onClick={editNote}><i className="fa-solid fa-pen" style={{ color: '#000000' }} /></button>

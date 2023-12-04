@@ -49,7 +49,7 @@ export default function MainContent(props) {
 
     return (
         <>
-            <Navbar />
+            <Navbar onCreateOpen={onCreateOpen} />
             <header>
                 <div className="header-container">
                     <div id="header-left">

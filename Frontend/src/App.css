@@ -288,7 +288,7 @@ main {
 #notes-container {
     height: 100%;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-evenly;
     align-items: flex-start;
     flex-wrap: wrap;
     overflow-x: hidden;
@@ -337,8 +337,10 @@ main {
     padding: 10px;
     border: 1px solid var(--grey-border-col);
     border-radius: 10px;
-    width: 285px;
+    width: 30%;
     height: 285px;
+    max-width: 285px;
+    min-width: 225px;
     background-color: var(--primary-bg-col);
 }
 
@@ -362,8 +364,16 @@ main {
     overflow: hidden;
 }
 
-.note-container .container .left h2 {
+.note-container .note-title {
     margin-bottom: 5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.note-container .note-content {
+    height: calc(100% - 47px);             /* 36.8px - title + 10px - padding */
+    overflow: hidden;
 }
 
 .note-container .container .right {

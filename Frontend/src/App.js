@@ -393,7 +393,7 @@ function App() {
           <Route path="/login" element={isLoggedIn ? <Navigate to={"/"} /> : <LogIn validateField={validateField} validatePassword={validatePassword} loginUser={loginUser} />} />
         </Routes>
         {isCreateNoteModalOpen && <CreateNote validateField={validateField} createUserNote={createUserNote} onClose={closeCreateNoteModal} />}
-        {isEditNoteModalOpen && <EditNote validateField={validateField} onClose={closeEditNoteModal} />}
+        {isEditNoteModalOpen && <EditNote validateField={validateField} updateNote={updateNote} onClose={closeEditNoteModal} />}
         <ToastContainer />
         <Cookie />
       </BrowserRouter>

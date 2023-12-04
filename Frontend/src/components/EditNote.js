@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux';
 import penImg from '../assests/pen.webp'
 import DottedLoader from './DottedLoader';
+import { toast } from 'react-toastify';
 
 export default function EditNote(props) {
-    const { validateField, onClose } = props;
+    const { validateField, updateNote, onClose } = props;
 
     const [shouldCloseModal, setShouldCloseModal] = useState(false);
     const [formError, setFormError] = useState({})
@@ -38,6 +39,7 @@ export default function EditNote(props) {
             setShowLoader(true);
 
             let formData = {};
+            const id = noteData.id;
             const title = noteData.title;
             const content = noteData.content;
             const category = noteData.category;
@@ -55,10 +57,14 @@ export default function EditNote(props) {
                     formData.priority = priority;
                 }
 
-                // Convert the form data object to a JSON string
-                const formDataJSON = JSON.stringify(formData);
-                console.log(formDataJSON)
-                onClose();
+                if (id && id.trim().length !== 0) {
+                    const responseData = await updateNote(formData, id.trim());
+                    console.log(responseData)
+                    onClose();
+                } else {
+                    toast.error("Client Side Error!");
+                    console.log("Note ID Not Available!");
+                }
             }
         } catch (error) {
             console.log(error);

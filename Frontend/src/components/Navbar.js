@@ -8,7 +8,9 @@ const toggleDropdown = () => {
     dropdownContainer.classList.toggle('active');
 }
 
-export default function Navbar() {
+export default function Navbar(props) {
+    const { onCreateOpen } = props;
+
     return (
         <nav>
             <img className='logo' src={logo} alt="logo" draggable="false" />         {/* 330px - W logo */}
@@ -19,7 +21,7 @@ export default function Navbar() {
                 </form>
             </div>
             <div id="nav-right-container">
-                <i className="fa-regular fa-pen-to-square fa-2xl" style={{ color: '#000000' }} />
+                <i className="fa-regular fa-pen-to-square fa-2xl" style={{ color: '#000000', cursor: 'pointer' }} onClick={onCreateOpen} />
                 <div className="dropdown-enabled-container" id='nav-dropdown-btn' onClick={toggleDropdown}>
                     <div className="user-container">
                         <div className="img-container">

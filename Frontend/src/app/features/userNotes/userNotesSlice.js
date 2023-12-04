@@ -13,10 +13,12 @@ export const userNotesSlice = createSlice({
             state.userNotes.push(action.payload);
         },
         updateUserNote: (state, action) => {
-            const noteIndex = state.userNotes.findIndex((note) => note.id === action.payload.id);
-            if (noteIndex !== -1) {
-                state.userNotes[noteIndex] = action.payload;
-            }
+            const indexToUpdate = state.userNotes.findIndex((note) => note._id === action.payload._id);
+            if (indexToUpdate !== -1) {
+                state.userNotes[indexToUpdate] = action.payload;
+            } else {
+                console.log("Could not find the note to update");
+            };
         },
         removeUserNote: (state, action) => {
             state.userNotes = state.userNotes.filter(
