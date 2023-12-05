@@ -47,9 +47,14 @@ export default function CreateNote(props) {
                 if (priority) {
                     newFormData.priority = priority;
                 }
-                const responseData = await createUserNote(newFormData)
-                console.log(responseData)
-                onClose();
+                const responseData = await createUserNote(newFormData);
+                const { success, message } = responseData;
+                if (success) {
+                    console.log(message);
+                    onClose();
+                } else {
+                    console.log("Error creating new note!");
+                }
             }
         } catch (error) {
             console.log(error)

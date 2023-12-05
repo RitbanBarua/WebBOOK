@@ -116,6 +116,15 @@ nav {
     border-radius: 50%;
 }
 
+#drop-down-arrow {
+    transform: rotate(0deg);
+    transition: all 0.45s ease;
+}
+
+#drop-down-arrow.active {
+    transform: rotate(-180deg);
+}
+
 .dropdown-container {
     position: absolute;
     top: 120px;

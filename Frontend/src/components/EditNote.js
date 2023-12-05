@@ -59,8 +59,11 @@ export default function EditNote(props) {
 
                 if (id && id.trim().length !== 0) {
                     const responseData = await updateNote(formData, id.trim());
-                    console.log(responseData)
-                    onClose();
+                    const { success, message } = responseData;
+                    if (success) {
+                        console.log(message);
+                        onClose();
+                    }
                 } else {
                     toast.error("Client Side Error!");
                     console.log("Note ID Not Available!");

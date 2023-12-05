@@ -3,9 +3,17 @@ import logo from '../assests/logo.png'
 import defaultUserImg from '../assests/default-profile.webp'
 import { Link } from 'react-router-dom';
 
+const animateDropDownArrow = () => {
+    const arrow = document.querySelector('#drop-down-arrow');
+    if (arrow) {
+        arrow.classList.toggle('active');
+    }
+}
+
 const toggleDropdown = () => {
     const dropdownContainer = document.getElementById('user-dropdown-container');
     dropdownContainer.classList.toggle('active');
+    animateDropDownArrow();
 }
 
 export default function Navbar(props) {
@@ -28,7 +36,7 @@ export default function Navbar(props) {
                             <img className='user-img' src={defaultUserImg} alt="user-img" />
                         </div>
                     </div>
-                    <i className="fa-solid fa-caret-down" style={{ color: '#000000' }} />
+                    <i className="fa-solid fa-caret-down" id='drop-down-arrow' style={{ color: '#000000' }} />
                     <div className="dropdown-container" id='user-dropdown-container'>
                         <h3 className='profile-name'>Ritban Barua Harsh</h3>
                         <p className='profile-email'>ritban@gmail.com</p>

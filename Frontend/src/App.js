@@ -32,6 +32,7 @@ function App() {
   const cryptoKey = process.env.REACT_APP_SECRET_CRYPTO_KEY;
   const registerURL = process.env.REACT_APP_REGISTER_URL;
   const loginURL = process.env.REACT_APP_LOGIN_URL;
+  const logoutURL = process.env.REACT_APP_LOGOUT_URL;
   const getUserNotesURL = process.env.REACT_APP_GET_NOTES_URL;
   const createNoteURL = process.env.REACT_APP_CREATE_NOTE_URL;
   const updateNoteURL = process.env.REACT_APP_UPDATE_NOTE_URL;
@@ -212,8 +213,24 @@ function App() {
   }
 
 
-  const logoutUser = () => {
-    dispatch(logout())
+  const logoutUser = async () => {
+    try {
+      const response = await axios.post(logoutURL, {}, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      })
+
+      const responseData = response.data;
+
+      if(response.status === 200 && responseData.success === true){
+        dispatch(logout());
+        toast.success("Logged Out Successfully!");
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 
 
