@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CryptoJS from 'crypto-js';
 import Note from './Note'
 import axios from 'axios'
 import Navbar from './Navbar';
 import Clock from './Clock';
+import LoadingPage1 from './LoadingPage1';
+import { setLoadingStatus } from '../app/features/loadingStatus/loadingStatusSlice';
 
 export default function MainContent(props) {
-    const { getUserNotes, deleteUserNote, onCreateOpen, onEditOpen } = props;
+    const { getUserNotes, deleteUserNote, logoutUser, onCreateOpen, onEditOpen } = props;
+    const dispatch = useDispatch();
 
     const cryptoKey = process.env.REACT_APP_SECRET_CRYPTO_KEY;
 
@@ -16,10 +19,10 @@ export default function MainContent(props) {
     const decryptedUserData = JSON.parse(CryptoJS.AES.decrypt(encryptedUserData, cryptoKey).toString(CryptoJS.enc.Utf8));
 
     const [dailyQuote, setDailyQuote] = useState()
-    //const [notes, setNotes] = useState([])
-    //const [userData, setUserData] = useState(decryptedUserData)
+
     const userData = decryptedUserData;
     const userNotes = useSelector(state => state.userNotes.userNotes);
+    const loadingStatus = useSelector(state => state.loadingStatus.isLoading);
 
 
     const fetchDailyQuote = async () => {
@@ -33,62 +36,67 @@ export default function MainContent(props) {
             console.log('Error in Fetching Quotes', error);
         }
     }
-    const test = async () => {
-
-    }
 
     useEffect(() => {
         try {
+            dispatch(setLoadingStatus(true));
             fetchDailyQuote();
             getUserNotes();
         } catch (error) {
             console.log(error)
+        } finally {
+            dispatch(setLoadingStatus(false));
         }
     }, [])
 
 
     return (
         <>
-            <Navbar onCreateOpen={onCreateOpen} />
-            <header>
-                <div className="header-container">
-                    <div id="header-left">
-                        <p id='greetings-para'>Welcome Back! <span>{userData.firstName}</span></p>
-                    </div>
-                    <div id="header-mid">
-                        {(dailyQuote) ? <div className="left-container">
-                            <img src={dailyQuote.imgURL} alt={dailyQuote.author} width={"60px"} />
-                        </div> : null}
-                        <div className="right-container">
-                            {(dailyQuote) ? <><q>{dailyQuote.quote}</q>
-                                <p>- {dailyQuote.author}</p></>
-                                : "Error Fetching Quote"}
-                        </div>
-                    </div>
-                    <div id="header-right">
-                        <Clock />
-                    </div>
-                </div>
-            </header>
-            <main>
-                <div id="notes-container">
-                    {(userNotes && userNotes.length !== 0) ?
-                        userNotes.map(note => {
-                            return (
-                                <Note key={note._id} id={note._id} title={note.title} content={note.content} category={note.category} priority={note.priority} deleteFnc={deleteUserNote} onEditOpen={onEditOpen} />
-                            )
-                        })
-                        : undefined}
-                    <div className="note-container add-note-container">
+            {
+                loadingStatus ? <LoadingPage1 /> :
+                    <>
+                        <Navbar logoutUser={logoutUser} onCreateOpen={onCreateOpen} />
+                        <header>
+                            <div className="header-container">
+                                <div id="header-left">
+                                    <p id='greetings-para'>Welcome Back! <span>{userData.firstName}</span></p>
+                                </div>
+                                <div id="header-mid">
+                                    {(dailyQuote) ? <div className="left-container">
+                                        <img src={dailyQuote.imgURL} alt={dailyQuote.author} width={"60px"} />
+                                    </div> : null}
+                                    <div className="right-container">
+                                        {(dailyQuote) ? <><q>{dailyQuote.quote}</q>
+                                            <p>- {dailyQuote.author}</p></>
+                                            : "Error Fetching Quote"}
+                                    </div>
+                                </div>
+                                <div id="header-right">
+                                    <Clock />
+                                </div>
+                            </div>
+                        </header>
+                        <main>
+                            <div id="notes-container">
+                                {(userNotes && userNotes.length !== 0) ?
+                                    userNotes.map(note => {
+                                        return (
+                                            <Note key={note._id} id={note._id} title={note.title} content={note.content} category={note.category} priority={note.priority} deleteFnc={deleteUserNote} onEditOpen={onEditOpen} />
+                                        )
+                                    })
+                                    : undefined}
+                                <div className="note-container add-note-container">
 
-                        <button onClick={onCreateOpen}>
-                            <i className="fa-solid fa-plus fa-2xl" style={{ color: '#b0b0b0' }} />
-                        </button>
-                        <p>Create Note</p>
+                                    <button onClick={onCreateOpen}>
+                                        <i className="fa-solid fa-plus fa-2xl" style={{ color: '#b0b0b0' }} />
+                                    </button>
+                                    <p>Create Note</p>
 
-                    </div>
-                </div>
-            </main>
+                                </div>
+                            </div>
+                        </main>
+                    </>
+            }
         </>
     )
 }

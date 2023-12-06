@@ -1,11 +1,16 @@
 import React from 'react'
 import abstruct1 from '../assests/abstructs/abstruct1.jpg'
+import abstruct2 from '../assests/abstructs/abstruct2.jpg'
+import abstruct3 from '../assests/abstructs/abstruct3.jpg'
+import abstruct4 from '../assests/abstructs/abstruct4.jpg'
 import { useDispatch } from 'react-redux';
 import { setEditableData } from '../app/features/editableData/editableDataSlice';
 
 export default function Note(props) {
   const { id, title, content, category, priority, deleteFnc, onEditOpen } = props;
   const dispatch = useDispatch();
+  const abstructs = [abstruct1, abstruct2, abstruct3, abstruct4];
+  const randomAbstruct = abstructs[Math.round(Math.random() * (abstructs.length - 1))];
 
   const editNote = () => {
     onEditOpen();
@@ -37,7 +42,7 @@ export default function Note(props) {
 
   return (
     <div className="note-container">
-      <div className="img-wrapper"><img src={abstruct1} alt="ab" /></div>
+      <div className="img-wrapper"><img src={randomAbstruct} alt="ab" /></div>
       <div className="container">
         <div className="left">
           <h2 className='note-title'>{title}</h2>  {/* 25 chars */}

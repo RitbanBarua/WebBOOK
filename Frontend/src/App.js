@@ -224,12 +224,23 @@ function App() {
 
       const responseData = response.data;
 
-      if(response.status === 200 && responseData.success === true){
+      if (response.status === 200 && responseData.success === true) {
         dispatch(logout());
         toast.success("Logged Out Successfully!");
       }
     } catch (error) {
       console.log(error.message);
+      if (error.response) {
+        const statusCode = error.response.status;
+        const responseData = error.response.data;
+        if (statusCode === 403 && responseData.success === false) {
+          toast.error("Client Side Error!");
+        } else {
+          toast.error("Internal Server Error!");
+        }
+      } else {
+        toast.error("Network Error!");
+      }
     }
   }
 
@@ -252,6 +263,9 @@ function App() {
           return userNotes;
         } else {
           toast.error("Session Expired, Please Login Again!");
+          setTimeout(() => {
+            window.location.href = window.location.origin + "/login";
+          }, 3000);
         }
       }
     } catch (error) {
@@ -291,9 +305,12 @@ function App() {
           dispatch(addUserNote(newNote));
           toast.success("New Note Created Sccessfully!");
           return responseData;
-        } else {
-          toast.error("Session Expired, Please Login Again!");
         }
+      } else {
+        toast.error("Session Expired, Please Login Again!");
+        setTimeout(() => {
+          window.location.href = window.location.origin + "/login";
+        }, 3000);
       }
     } catch (error) {
       console.log(error.message)
@@ -335,6 +352,9 @@ function App() {
         }
       } else {
         toast.error('Session Expired, Please Login Again!');
+        setTimeout(() => {
+          window.location.href = window.location.origin + "/login";
+        }, 3000);
       }
     } catch (error) {
       console.log(error.message);
@@ -375,10 +395,9 @@ function App() {
         }
       } else {
         toast.error("Session Expired, Please Login Again!");
-        // setTimeout(() => {
-        //   //window.location.href = window.location.origin + "/login";
-        //   window.location.reload();
-        // }, 3000);
+         setTimeout(() => {
+           window.location.href = window.location.origin + "/login";
+         }, 3000);
       }
     } catch (error) {
       console.log(error.message)
@@ -405,7 +424,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={isLoggedIn ? <MainContent getUserNotes={getUserNotes} deleteUserNote={deleteUserNote} onCreateOpen={openCreateNoteModal} onEditOpen={openEditNoteModal} /> : <Navigate to={"/register"} />} />
+          <Route path="/" element={isLoggedIn ? <MainContent getUserNotes={getUserNotes} deleteUserNote={deleteUserNote} logoutUser={logoutUser} onCreateOpen={openCreateNoteModal} onEditOpen={openEditNoteModal} /> : <Navigate to={"/register"} />} />
           <Route path='/register' element={isLoggedIn ? <Navigate to={"/"} /> : <Register validateField={validateField} validatePassword={validatePassword} registerUser={registerUser} />} />
           <Route path="/login" element={isLoggedIn ? <Navigate to={"/"} /> : <LogIn validateField={validateField} validatePassword={validatePassword} loginUser={loginUser} />} />
         </Routes>

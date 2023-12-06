@@ -17,7 +17,7 @@ const toggleDropdown = () => {
 }
 
 export default function Navbar(props) {
-    const { onCreateOpen } = props;
+    const { logoutUser, onCreateOpen } = props;
 
     return (
         <nav>
@@ -65,7 +65,7 @@ export default function Navbar(props) {
                                     <span className='nav-list-item'>Help</span>
                                 </Link>
                             </li>
-                            <li>
+                            <li onClick={logoutUser}>
                                 <Link href="/">
                                     <i className="fas fa-arrow-right-from-bracket"></i>
                                     <span className='nav-list-item'>Logout</span>

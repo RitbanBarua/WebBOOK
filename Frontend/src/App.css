@@ -90,7 +90,6 @@ nav {
 
 .dropdown-enabled-container {
     position: relative;
-    cursor: pointer;
 }
 
 #nav-right-container .dropdown-enabled-container {
@@ -98,6 +97,10 @@ nav {
     justify-content: center;
     align-items: center;
     padding-top: 3.5px;
+}
+
+.user-container {
+    cursor: pointer;
 }
 
 .user-container .img-container {
@@ -117,6 +120,7 @@ nav {
 }
 
 #drop-down-arrow {
+    cursor: pointer;
     transform: rotate(0deg);
     transition: all 0.45s ease;
 }
@@ -198,6 +202,7 @@ nav {
 }
 
 #user-dropdown-menu li a {
+    width: 100%;
     display: flex;
     align-items: center;
     text-decoration: none;
@@ -292,16 +297,15 @@ nav {
 
 main {
     height: calc(100vh - 70px);
+    background-color: var(--secondary-bg-col);
 }
 
 #notes-container {
-    height: 100%;
     display: flex;
     justify-content: space-evenly;
     align-items: flex-start;
     flex-wrap: wrap;
     overflow-x: hidden;
-    background-color: var(--secondary-bg-col);
 }
 
 .add-note-container {
@@ -358,6 +362,10 @@ main {
     height: 37px;
     overflow: hidden;
     border-radius: 5px;
+}
+
+.note-container .img-wrapper img {
+    width: 100%;
 }
 
 .note-container .container {
