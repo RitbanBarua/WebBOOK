@@ -22,8 +22,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookie from './components/Cookie';
 import Cookies from 'js-cookie';
+import LandingPage from './components/LandingPage';
 //import LoadingPage1 from './components/LoadingPage1';
-
+import { register } from 'swiper/element/bundle';
 
 function App() {
   const [isCreateNoteModalOpen, setCreateNoteModalOpen] = useState(false);
@@ -42,6 +43,8 @@ function App() {
   const isLoggedIn = useSelector(state => state.loggedInStatus.isLoggedIn);
   const isLoggedInCookie = Cookies.get('isLoggedIn');
   //const isLoading = useSelector(state => state.loadingStatus.isLoading);
+
+  register();
 
   const openCreateNoteModal = () => {
     setCreateNoteModalOpen(true);
@@ -424,9 +427,10 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={isLoggedIn ? <MainContent getUserNotes={getUserNotes} deleteUserNote={deleteUserNote} logoutUser={logoutUser} onCreateOpen={openCreateNoteModal} onEditOpen={openEditNoteModal} /> : <Navigate to={"/register"} />} />
-          <Route path='/register' element={isLoggedIn ? <Navigate to={"/"} /> : <Register validateField={validateField} validatePassword={validatePassword} registerUser={registerUser} />} />
-          <Route path="/login" element={isLoggedIn ? <Navigate to={"/"} /> : <LogIn validateField={validateField} validatePassword={validatePassword} loginUser={loginUser} />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/dashboard" element={isLoggedIn ? <MainContent getUserNotes={getUserNotes} deleteUserNote={deleteUserNote} logoutUser={logoutUser} onCreateOpen={openCreateNoteModal} onEditOpen={openEditNoteModal} /> : <Navigate to={"/register"} />} />
+          <Route path='/register' element={isLoggedIn ? <Navigate to={"/dashboard"} /> : <Register validateField={validateField} validatePassword={validatePassword} registerUser={registerUser} />} />
+          <Route path="/login" element={isLoggedIn ? <Navigate to={"/dashboard"} /> : <LogIn validateField={validateField} validatePassword={validatePassword} loginUser={loginUser} />} />
         </Routes>
         {isCreateNoteModalOpen && <CreateNote validateField={validateField} createUserNote={createUserNote} onClose={closeCreateNoteModal} />}
         {isEditNoteModalOpen && <EditNote validateField={validateField} updateNote={updateNote} onClose={closeEditNoteModal} />}

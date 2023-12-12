@@ -12,6 +12,7 @@
 :root {
     --primary-bg-col: #fff;
     --secondary-bg-col: #F2F3F7;
+    --black-bg: #000;
     --grey-border-col: #ced4da;
     --input-bg-col: #f9faf8;
     --input-border-col: rgb(209 213 219);
@@ -21,7 +22,12 @@
     --disabled-input-bg-col: rgba(220, 220, 220, 1);
     --error-text-col: #e74c3c;
     --text-grey-col: #63727e;
+    --text-white-col: #fff;
+    --swiper-pagination-grey: #A1A1A1;
+    --swiper-pagination-white: #fff;
     --clock-width: 465px;
+    --grey-400: #98A2B3;
+    --grey-500: #667085;
 }
 
 body {
@@ -216,8 +222,312 @@ nav {
 }
 
 @media only screen and (max-width: 700px) {
-    .search-form{
+    .search-form {
         display: none;
+    }
+}
+
+@media only screen and (max-width: 385px) {
+    #features {
+        height: unset;
+    }
+
+    #contact .container {
+        height: unset;
+        max-height: unset;
+    }
+}
+
+#contact {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#contact .container {
+    text-align: center;
+    max-width: 1216px;
+    max-height: 383px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+    padding: 5%;
+    border-radius: 16px;
+    background: rgba(161, 161, 161, 0.10);
+}
+
+#contact-img-container {
+    width: 164px;
+    margin: 0px auto;
+}
+
+#contact-img-container img {
+    position: relative;
+}
+
+#avatar1 {
+    transform: translateX(10px);
+}
+
+#avatar2 {
+    transform: translateX(0px);
+    z-index: 2;
+}
+
+#avatar3 {
+    transform: translateX(-10px);
+}
+
+#contact .container button {
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: 500;
+    border-radius: 10px;
+    background: #000;
+    color: var(--text-white-col);
+    border: none;
+    cursor: pointer;
+}
+
+#user-count {
+    padding: 5%;
+    max-height: 595px;
+    background: var(--black-bg);
+    overflow: hidden;
+}
+
+#user-count .container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-white-col);
+}
+
+#user-count .container .content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 56px;
+}
+
+#user-count .btn-container button {
+    background: #fff;
+    color: #000;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 10px;
+    cursor: pointer;
+}
+
+#user-count .container .img-container {
+    width: 40%;
+    object-fit: cover;
+    overflow: hidden;
+}
+
+.mock-img {
+    width: 100%;
+    transform: translateX(-10px);
+}
+
+@media only screen and (max-width: 735px) {
+    #user-count .container .content {
+        gap: 30px;
+        align-items: center;
+        text-align: center;
+    }
+
+    #user-count .container .img-container {
+        width: 100%;
+    }
+}
+
+/* Landing Page CSS */
+section {
+    width: 100vw;
+    height: 100vh;
+    max-width: 100%;
+    min-height: 595px;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+}
+
+.section-title {
+    font-family: 'Arvo';
+    font-size: 36px;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+#features {
+    padding: 5%;
+}
+
+#features-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 2rem 0;
+}
+
+.feature-logo {
+    height: 100px;
+}
+
+.feature-title {
+    text-align: center;
+}
+
+.feature-description {
+    text-align: center;
+}
+
+#testimonial {
+    padding: 5%;
+    max-height: 595px;
+    background: var(--black-bg);
+}
+
+#testimonial .swiper-slide {
+    background-color: var(--black-bg);
+    color: var(--text-white-col);
+}
+
+.logo-animation {
+    height: 100px;
+}
+
+.testimonial-content {
+    font-family: cursive;
+    font-size: 24px;
+}
+
+.testimonial-author-container {
+    margin-top: 35px;
+}
+
+.testimonial-author-image {
+    width: 54px !important;
+    height: 54px !important;
+    border-radius: 50%;
+    margin: auto;
+}
+
+.testimonial-author {
+    font-size: 28px;
+    font-weight: 500;
+}
+
+.testimonial-author-title {
+    font-size: 14px;
+    font-weight: 300;
+}
+
+@media only screen and (max-width: 385px) {
+    #testimonial {
+        max-height: unset;
+        height: unset;
+    }
+}
+
+/* Footer CSS */
+footer {
+    padding: 5% 5% 0% 5%;
+}
+
+footer .container .top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10%;
+}
+
+footer .container .top > div {
+    margin-bottom: 5%;
+}
+
+footer .top .logo {
+    width: unset;
+    max-width: 250px;
+}
+
+footer .top a {
+    text-decoration: none;
+}
+
+footer .top .right {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
+
+footer .top .right h3 {
+    font-size: 20px;
+}
+
+footer .top .right ul li {
+    list-style: none;
+    margin: 5px 0px;
+}
+
+footer .top .right ul li a {
+    text-decoration: none;
+    color: #1a1a25;
+    font-weight: 500;
+    font-size: 18px;
+}
+
+footer .container .bottom {
+    display: flex;
+    flex-wrap: wrap-reverse;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    border-top: 2px solid rgba(152, 162, 179, 0.4);
+    padding: 50px 0px;
+}
+
+footer .container .bottom p {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--grey-500);
+}
+
+footer .bottom .socials-container {
+    min-width: 100px;  /* media - 460px */
+}
+
+footer .bottom .socials-container a {
+    margin: 0px 10px;
+}
+
+@media only screen and (max-width: 450px) {
+    footer .top > div {
+        width: 100%;
+    }
+
+    footer .top .left {
+        text-align: center;
+    }
+
+    footer .top .left img {
+        width: 100%;
+    }
+
+    footer .bottom > * {
+        width: 100%;
+        text-align: center;
     }
 }
 
@@ -292,7 +602,8 @@ nav {
     width: var(--clock-width);
     min-width: var(--clock-width);
     padding: 0px;
-    overflow: hidden;                               /* Check Clock.js CSS */
+    overflow: hidden;
+    /* Check Clock.js CSS */
 }
 
 main {
@@ -389,7 +700,8 @@ main {
 }
 
 .note-container .note-content {
-    height: calc(100% - 47px);             /* 36.8px - title + 10px - padding */
+    height: calc(100% - 47px);
+    /* 36.8px - title + 10px - padding */
     overflow: hidden;
 }
 
@@ -989,6 +1301,29 @@ label {
         align-items: center;
         gap: 10px;
     }
+}
+
+
+/* Swiper CSS */
+.swiper-container {
+    width: 100%;
+    height: 100%;
+}
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 /* MISC */

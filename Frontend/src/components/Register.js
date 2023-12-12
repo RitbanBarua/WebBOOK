@@ -91,7 +91,7 @@ export default function Register(props) {
                 if (success !== undefined && success === true) {
 
                     // Redirect to the dashboard
-                    navigate("/");
+                    navigate("/dashboard");
                 }
 
                 else if (success !== undefined && success === false) {
