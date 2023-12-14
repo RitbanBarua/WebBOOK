@@ -2,6 +2,8 @@
 /* quotes: https://blog.hubspot.com/sales/famous-quotes */
 
 /* Global CSS */
+@import url(./assests/fonts/clash-display/css/clash-display.css);
+
 * {
     margin: 0;
     padding: 0;
@@ -227,6 +229,130 @@ nav {
     }
 }
 
+/* Landing Page CSS */
+section {
+    width: 100vw;
+    height: 100vh;
+    max-width: 100%;
+    min-height: 595px;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+}
+
+.section-title {
+    font-family: 'Arvo';
+    font-size: 36px;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+#hero {
+    padding: 5%;
+}
+
+#hero .container {
+    display: flex;
+    flex-wrap: wrap-reverse;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#hero .left {
+    width: 50%;
+    display: grid;
+    gap: 34px;
+}
+
+#hero .right {
+    width: 50%;
+    height: 100%;
+    position: relative;
+}
+
+.hero-heading {
+    color: #000;
+    font-family: Clash Display;
+    font-size: 57px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 136%;  /* 77.52px */
+    font-family: 'ClashDisplay-Medium';
+}
+
+.hero-para {
+    color: var(--Ash, #A1A1A1);
+    font-family: DM Sans;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 136%;  /* 27.2px */
+}
+
+#hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: absolute;
+}
+
+#hero .btn-container button {
+    background: #000;
+    color: var(--text-white-col);
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 10px;
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 800px) {
+    #hero {
+        height: unset;
+    }
+
+    #hero .container > div {
+        width: 100%;
+    }
+
+    #hero .right {
+        height: 70vh;
+    }
+}
+
+@media only screen and (max-width: 350px) {
+    #hero .right {
+        display: none;
+    }
+}
+
+#features {
+    padding: 5%;
+}
+
+#features-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 2rem 0;
+    gap: 5%;
+}
+
+.feature-logo {
+    height: 100px;
+}
+
+.feature-title {
+    text-align: center;
+}
+
+.feature-description {
+    text-align: center;
+}
+
 @media only screen and (max-width: 385px) {
     #features {
         height: unset;
@@ -346,50 +472,6 @@ nav {
     }
 }
 
-/* Landing Page CSS */
-section {
-    width: 100vw;
-    height: 100vh;
-    max-width: 100%;
-    min-height: 595px;
-}
-
-.container {
-    width: 100%;
-    height: 100%;
-}
-
-.section-title {
-    font-family: 'Arvo';
-    font-size: 36px;
-    text-align: center;
-    letter-spacing: 1px;
-}
-
-#features {
-    padding: 5%;
-}
-
-#features-container {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    flex-wrap: wrap;
-    padding: 2rem 0;
-}
-
-.feature-logo {
-    height: 100px;
-}
-
-.feature-title {
-    text-align: center;
-}
-
-.feature-description {
-    text-align: center;
-}
-
 #testimonial {
     padding: 5%;
     max-height: 595px;
@@ -451,7 +533,7 @@ footer .container .top {
     gap: 10%;
 }
 
-footer .container .top > div {
+footer .container .top>div {
     margin-bottom: 5%;
 }
 
@@ -505,7 +587,8 @@ footer .container .bottom p {
 }
 
 footer .bottom .socials-container {
-    min-width: 100px;  /* media - 460px */
+    min-width: 100px;
+    /* media - 460px */
 }
 
 footer .bottom .socials-container a {
@@ -513,7 +596,7 @@ footer .bottom .socials-container a {
 }
 
 @media only screen and (max-width: 450px) {
-    footer .top > div {
+    footer .top>div {
         width: 100%;
     }
 
@@ -525,7 +608,7 @@ footer .bottom .socials-container a {
         width: 100%;
     }
 
-    footer .bottom > * {
+    footer .bottom>* {
         width: 100%;
         text-align: center;
     }

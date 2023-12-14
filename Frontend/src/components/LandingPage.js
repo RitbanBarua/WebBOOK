@@ -3,6 +3,7 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import mockImg from '../assests/landing-assests/mockup.png';
 import mockEditImg from '../assests/landing-assests/mockup-edit.png';
+import circleAnimation from '../assests/landing-assests/circle.gif';
 import cloudSaveAnimation from '../assests/lottie_animations/cloud-save.json';
 import privacyAnimation from '../assests/lottie_animations/privacy.json';
 import encryptAnimation from '../assests/lottie_animations/encryption.json';
@@ -38,10 +39,26 @@ export default function LandingPage() {
         <>
             <section id='hero'>
                 <div className="container">
-                    <img src={mockEditImg} alt="" style={{width: '100%'}} />
+                    <div className="left">
+                        <h1 className='hero-heading'>Enjoy note taking with your friends</h1>
+                        <p className='hero-para'>Put down your thoughts down in one app, share
+                            with your friends and loved ones.</p>
+                        <div className="btn-container">
+                            <Link to="/register">
+                                <button>Get Started Now!</button>
+                            </Link>
+                            <Link to="/login">
+                                <button>Login</button>
+                            </Link>
+                        </div>
+                    </div>
+                    <div className="right">
+                        <img id='circle-animation' src={circleAnimation} alt="" />
+                        <img id='hero-img' src={mockEditImg} alt="hero-img" />
+                    </div>
                 </div>
             </section>
-            
+
             <section id='features'>
                 <div className="container">
                     <h1 className="section-title">Features</h1>
@@ -138,7 +155,7 @@ export default function LandingPage() {
             <section id="user-count">
                 <div className="container">
                     <div className="content">
-                        <p>Use <span>WebBOOK</span></p>
+                        <p>Use <span style={{fontFamily: 'ClashDisplay-Semibold'}}>WebBOOK</span></p>
                         <p className="user-count-subtitle">
                             Join over 20,000+ users
                             and make your life easier.

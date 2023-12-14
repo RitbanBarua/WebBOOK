@@ -36,10 +36,10 @@ export default function Footer() {
                     <div className="bottom">
                         <p>© 2023 - WebBOOK. All rights reserved.</p>
                         <div className="socials-container">
-                            <a href="/" target='_blank'>
+                            <a href="https://github.com/RitbanBarua" target='_blank' rel="noreferrer">
                                 <i className="fa-brands fa-square-github fa-2xl" style={{ color: '#000' }}></i>
                             </a>
-                            <a href="/" target='_blank'>
+                            <a href="https://www.linkedin.com/in/ritbanbarua/" target='_blank' rel="noreferrer">
                                 <i className="fa-brands fa-linkedin fa-2xl" style={{ color: '#000' }}></i>
                             </a>
                         </div>
