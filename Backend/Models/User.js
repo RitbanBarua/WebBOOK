@@ -16,8 +16,7 @@ const userSchema = new mongoose.Schema({
     staredNotes: [{ type: mongoose.Types.ObjectId, ref: 'Note' }]
 }, { timestamps: true });
 
+
 const User = mongoose.model('User', userSchema);
 
 export default User;
-
-// https://dev.to/alexmercedcoder/mongodb-relationships-using-mongoose-in-nodejs-54cc
