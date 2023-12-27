@@ -22,14 +22,14 @@ WebBOOK API uses JWT (JSON Web Tokens) for authentication. It uses secure and ht
   
   | Parameter        | Type     | Required    | Description                |
   | :--------------- | :------- | :---------- | :------------------------- |
-  | `username`       | `string` | True        | Unique Username            |
-  | `firstName`      | `string` | True        | First Name of User         |
-  | `lastName`       | `string` | True        | Last Name of User          |
-  | `email`          | `string` | True        | Unique User Email ID       |
-  | `password`       | `string` | True        | Strong User Password       |
-  | `countryCode`    | `number` | True        | User Mobile Country Code   |
-  | `mobile`         | `number` | False       | Unique User Mobile No      |
-  | `profilePicture` | `string` | False       | User Profile Picture       |
+  | `username`       | `string` | **True**    | Unique Username            |
+  | `firstName`      | `string` | **True**    | First Name of User         |
+  | `lastName`       | `string` | **True**    | Last Name of User          |
+  | `email`          | `string` | **True**    | Unique User Email ID       |
+  | `password`       | `string` | **True**    | Strong User Password       |
+  | `countryCode`    | `number` | **True**    | User Mobile Country Code   |
+  | `mobile`         | `number` | **False**   | Unique User Mobile No      |
+  | `profilePicture` | `string` | **False**   | User Profile Picture       |
  
  ***Example***:
  ```json
@@ -47,6 +47,54 @@ WebBOOK API uses JWT (JSON Web Tokens) for authentication. It uses secure and ht
   ```json
   {
     "success": true,
-    "message": "New User Created Successfully"
+    "message": "New User Created Successfully!"
+  }
+ ```
+
+ ### 2. User Login
+ - **Method**: `POST`
+ - **Endpoint**: `/user/login`
+ - **Request Body**:
+  
+  | Parameter        | Type     | Required    | Description                |
+  | :--------------- | :------- | :---------- | :------------------------- |
+  | `email`          | `string` | **True**    | Registered User Email ID   |
+  | `password`       | `string` | **True**    | Registered User Password   |
+ 
+ ***Example***:
+ ```json
+  {
+    "email": "user@example.com",
+    "password": "user_password",
+  }
+ ```
+ - **Response**:
+  ```json
+  {
+    "success": true,
+    "message": "Logged In Successfully!",
+    "userData": {
+      "username": "example_user",
+      "firstName":"John",
+      "lastName" : "Doe",
+      "email": "user@example.com",
+      "role": "User",
+      "profilePicture": "",
+      "staredNotes": []
+    }
+  }
+
+
+ ### 3. User Logout
+ - **Method**: `POST`
+ - **Endpoint**: `/user/logout`
+ - **Request Body**:
+  ***N/A***
+
+ - **Response**:
+  ```json
+  {
+    "success": true,
+    "message": "Logged out successfully"
   }
  ```
