@@ -83,9 +83,9 @@ WebBOOK API uses JWT (JSON Web Tokens) for authentication. It uses secure and ht
       "staredNotes": []
     }
   }
+ ```
 
-
- ### 3. User Logout
+### 3. User Logout
  - **Method**: `POST`
  - **Endpoint**: `/user/logout`
  - **Request Body**:
