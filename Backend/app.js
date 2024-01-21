@@ -26,7 +26,7 @@ app.use('/api/v1/quotes', dailyQuoteRouter);
 
 // Define a catch-all route for undefined routes
 app.use((req, res) => {
-    res.status(404).json({ success: false, message: "Route Not Found", docs: "" });
+    res.status(404).json({ success: false, message: "Route Not Found", docs: "https://github.com/RitbanBarua/WebBOOK/blob/main/Backend/Readme.md" });
 });
 
 
