@@ -21,6 +21,8 @@ export default function Register(props) {
     const passwordRef = useRef('');
     // const confirmPasswordRef = useRef('');
 
+    document.title = "Register Account - WebBOOK";
+
     const setErrorDataField = (fieldName, value) => {
         setFormError(prevData => ({
             ...prevData,

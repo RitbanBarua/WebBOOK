@@ -13,6 +13,8 @@ export default function LogIn(props) {
   const emailRef = useRef('');
   const passwordRef = useRef('');
 
+  document.title = "Log In - WebBOOK";
+
   const setErrorDataField = (fieldName, value) => {
     setFormError(prevData => ({
       ...prevData,

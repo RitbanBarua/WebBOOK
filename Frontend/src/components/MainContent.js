@@ -24,6 +24,8 @@ export default function MainContent(props) {
     const userNotes = useSelector(state => state.userNotes.userNotes);
     const loadingStatus = useSelector(state => state.loadingStatus.isLoading);
 
+    document.title = "Dashboard - WebBOOK";
+
 
     const fetchDailyQuote = async () => {
         try {
