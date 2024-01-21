@@ -27,7 +27,7 @@ export default function MainContent(props) {
 
     const fetchDailyQuote = async () => {
         try {
-            const fetchingQuote = await axios.get("https://web-book-api.vercel.app/daily-quote");
+            const fetchingQuote = await axios.get("https://web-book-api.vercel.app/api/v1/quotes/daily-quote");
             const fetchedQuote = fetchingQuote.data;
             if (fetchedQuote) {
                 setDailyQuote(fetchedQuote);
@@ -39,13 +39,15 @@ export default function MainContent(props) {
 
     useEffect(() => {
         try {
-            dispatch(setLoadingStatus(true));
+            // dispatch(setLoadingStatus(true));
             fetchDailyQuote();
             getUserNotes();
         } catch (error) {
             console.log(error)
         } finally {
-            dispatch(setLoadingStatus(false));
+            setTimeout(() => {
+                dispatch(setLoadingStatus(false));
+            }, 2500);
         }
     }, [])
 

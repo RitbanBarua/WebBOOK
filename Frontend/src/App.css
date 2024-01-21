@@ -690,7 +690,7 @@ footer .bottom .socials-container a {
 }
 
 main {
-    height: calc(100vh - 70px);
+    min-height: calc(100vh - 70px);
     background-color: var(--secondary-bg-col);
 }
 
